@@ -5,6 +5,10 @@ body {
     background-color: #f7f7f7 !important;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 h1,
 h2,
 h3,
@@ -191,8 +195,14 @@ p {
 }
 
 .card-feature .card-img-top {
-    width: 11 !important;
+    width: 100%;
     object-fit: cover;
+}
+
+@media (max-width: 768px) {
+    .card-feature .card-img-top {
+        width: 50%;
+    }
 }
 
 .phone-frame {
@@ -247,7 +257,6 @@ p {
 
 blockquote p {
     font-size: 1.75rem;
-    /* Larger font for testimonials */
     color: #333;
 }
 
@@ -268,9 +277,7 @@ blockquote p {
 .sliding-container {
     width: 100%;
     height: 20%;
-    /* Set a fixed height for the sliding section */
     overflow: hidden;
-    /* Hide overflow */
     position: relative;
 }
 
@@ -278,42 +285,31 @@ blockquote p {
     display: flex;
     border-radius: 50%;
     width: calc(100% * 4);
-    /* Adjust based on the number of images */
     animation: slide 25s infinite linear;
-    /* Adjust duration for speed */
 }
 
 .sliding-images img {
     width: 20%;
-    /* Adjust based on the number of images */
     height: 100%;
-    /* Fill the height of the container */
     object-fit: cover;
-    /* Maintain aspect ratio and cover the area */
 }
 
 @media screen and (max-width: 768px) {
 
-    /* Target screens smaller than 768px */
     .sliding-container {
         height: auto;
-        /* Adjust height for small screens */
         margin: 0;
         padding: 0;
     }
 
     .sliding-images {
         width: calc(100% * 5);
-        /* Keep width responsive */
         border-radius: 0;
-        /* Remove border-radius for better alignment */
     }
 
     .sliding-images img {
         width: 20%;
-        /* Take full width of the screen proportionally */
         height: auto;
-        /* Maintain image aspect ratio */
     }
 }
 
@@ -423,8 +419,15 @@ blockquote p {
     transform: rotateZ(180deg);
 }
 
+@media screen and (max-width: 768px) {
+    .text-group {
+        width: 100%;
+        padding: 1rem;
+    }
+}
+
 .text-group {
-    padding: 8rem;
+    padding: 8rem 1rem;
 }
 
 .text-cat {
@@ -511,3 +514,98 @@ blockquote p {
     text-align: center;
     border-radius: 1rem;
 }
+
+.footer-box{
+    background: linear-gradient(135deg, #FFE5D9, #E5F0FF);
+}
+
+.footer-section {
+    background-color: #f8f9fa;
+    padding: 0;
+}
+
+.container {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.text-dark{
+    padding: 2rem;
+}
+
+.store-title {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #0C2556;
+}
+
+.email-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #0C2556;
+}
+
+.custom-input-toko {
+    flex: 1;
+    border-radius: 1.5rem;
+    border: 1px solid white;
+    padding: 12px 20px 12px 20px;
+    font-size: 16px;
+    background: white;
+    color: black;
+    width: 100%;
+    margin-bottom: 1rem;
+    ::placeholder {
+        color: white;
+    }
+}
+
+@media (max-width: 768px){
+    .store-search-container{
+        margin: 0 3rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .store-search-container{
+        margin: 0 30%;
+    }
+}
+
+.card-product {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    background: white;
+    padding: 12px;
+    transition: transform 0.3s ease-in-out;
+    text-decoration: none;
+}
+
+.card-product:hover {
+    cursor: pointer;
+    transform: scale(1.02);
+}
+
+.card-product .card-img-top {
+    border-radius: 12px;
+    height: 250px;
+    width: 100%;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+}
+
+.card-product .card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.card-product .card-text {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
