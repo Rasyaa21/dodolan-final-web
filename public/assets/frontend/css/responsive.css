@@ -1,0 +1,24 @@
+@media screen and (max-width: 768px) {
+    .hero {
+        height: 65vh;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+        line-height: 1.5;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    .input-container {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .create-button {
+        display: none !important;
+    }
+}

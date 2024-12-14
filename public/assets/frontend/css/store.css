@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+
+:root {
+    --header-color: #FFA500;
+    --primary-color: #333;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f7f7f7 !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin-bottom: 0;
+    color: var(--primary-color);
+}
+
+.watermark {
+    position: fixed;
+    bottom: 1.875rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99;
+    background-color: #fff;
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    border-radius: 1.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+}
+
+.header {
+    background-color: var(--header-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 3rem 0;
+}
+
+.avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 0.5rem;
+    object-fit : cover;
+    border: 2px solid var(--primary-color);
+    padding: 0.2rem;
+}
+
+.store-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.store-city {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+}
+
+.card-product {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    background: white;
+    padding: 12px;
+    transition: transform 0.3s ease-in-out;
+    text-decoration: none;
+}
+
+.card-product:hover {
+    cursor: pointer;
+    transform: scale(1.02);
+}
+
+.card-product .card-img-top {
+    border-radius: 12px;
+    height: 250px;
+    width: 100%;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+}
+
+.card-product .card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.card-product .card-text {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+
+@media (max-width: 768px) {
+    .header {
+        padding: 2rem 0;
+    }
+
+    .avatar {
+        width: 100px;
+        height: 100px;
+    }
+
+    .store-name {
+        font-size: 1.2rem;
+    }
+
+    .store-city {
+        font-size: 0.9rem;
+    }
+
+    .card-product {
+        padding: 10px;
+    }
+
+    .card-product .card-img-top {
+        height: 160px;
+    }
+
+    .card-product .card-title {
+        font-size: 12px;
+    }
+
+    .card-product .card-text {
+        font-size: 12px;
+    }
+}
+
+.product-container {
+    height: 100vh;
+    display: flex;
+}
+
+.product-image {
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+}
