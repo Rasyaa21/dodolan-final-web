@@ -205,7 +205,7 @@
                                             <td>{{ $promoCode->amount }}</td>
                                             <td>
                                                 <div class="text-end"> <a
-                                                        href="{{ route('store.codes.edit', $promoCode->id) }}"
+                                                        href="{{ route('store.codes.edit', [$store->id, $promoCode->id]) }}"
                                                         class="btn btn-outline-warning btn-md">Edit</a>
 
                                                     <form action="{{ route('store.codes.destroy', $promoCode->id) }}" method="POST" class="d-inline">
@@ -252,7 +252,7 @@
                                             <td>{{ $transaction->customer_name }}</td>
                                             <td>{{ $transaction->customer_address }}</td>
                                             <td>{{ $transaction->customer_phone }}</td>
-                                            <td>Rp {{ number_format($transaction->total_price, 0, ',', '.') }}</td>
+                                            <td>Rp {{ number_format($transaction->final_price, 0, ',', '.') }}</td>
                                             <td>
                                                 @if ($transaction->payment_status == 'pending')
                                                     <button class="btn btn-warning btn-sm">Belum Dibayar</button>
