@@ -37,7 +37,7 @@ class StoreController extends Controller
         $store = $this->storeRepository->getStoreByUsername($username);
         $product = $this->productRepository->getProductBySlugAndStoreId($slug, $store->id);
 
-        return view('pages.frontend.store.product.show', compact('store', 'product'));
+        return view('pages.frontend.store.detail', compact('store', 'product'));
     }
 
 }
