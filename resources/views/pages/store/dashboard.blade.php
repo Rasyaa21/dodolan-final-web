@@ -205,7 +205,7 @@
                                             <td>{{ $promoCode->amount }}</td>
                                             <td>
                                                 <div class="text-end"> <a
-                                                        href="{{ route('admin.promo.edit', $promoCode->id) }}"
+                                                        href="{{ route('store.codes.edit', $promoCode->id) }}"
                                                         class="btn btn-outline-warning btn-md">Edit</a>
 
                                                     <form action="{{ route('store.codes.destroy', $promoCode->id) }}" method="POST" class="d-inline">

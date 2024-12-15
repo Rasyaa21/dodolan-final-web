@@ -21,27 +21,21 @@
 
 
 
-<section class="about-usage" style="background-color: #fff; padding: 8rem">
+<section class="features-section" style="background-color: #fff; padding: 8rem">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="text-center col-md-8">
-                <h2 class="mb-4 team-title">Kegunaan Aplikasi</h2>
-                <p class="section-description">
-                    Aplikasi ini dirancang untuk membantu pemilik UMKM dalam meningkatkan efisiensi dan memperluas jangkauan bisnis mereka melalui fitur-fitur berikut:
-                </p>
-                <ul class="mx-auto list-unstyled text-start" style="max-width: 600px;">
-                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Mengelola stok produk dengan mudah melalui sistem inventaris otomatis.</li>
-                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Membuat laporan keuangan sederhana untuk memantau pemasukan dan pengeluaran.</li>
-                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Mempromosikan produk secara online dengan fitur integrasi media sosial.</li>
-                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Menjangkau pelanggan lebih luas melalui sistem pemasaran berbasis digital.</li>
-                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Memberikan insight bisnis menggunakan analitik untuk memahami tren penjualan.</li>
-                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Mempermudah pelanggan dalam melakukan transaksi melalui metode pembayaran yang terintegrasi.</li>
-                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Membantu membangun loyalitas pelanggan dengan fitur pengingat dan promosi khusus.</li>
-                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Mendukung kolaborasi tim melalui manajemen tugas dan komunikasi internal.</li>
-                </ul>
-                <p class="mt-4 section-description">
-                    Dengan aplikasi ini, UMKM dapat fokus pada pengembangan bisnis sambil mengandalkan teknologi untuk mendukung operasional sehari-hari.
-                </p>
+            <div class="col-md-8">
+                <h2 class="mb-4 text-center team-title">Fitur Aplikasi</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="list-unstyled text-start" style="max-width: 600px; margin: auto;">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Pembuatan toko online instan</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Checkout tanpa akun</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Subsidi ongkos kirim</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Manajemen produk</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -72,7 +72,7 @@ class PromoCodeController extends Controller
     public function edit(string $id)
     {
         $code = $this->promoRepo->getPromoCodeById($id);
-        return view('pages.frontend.dashboard.promocodes.edit', compact(['code', 'id']));
+        return view('pages.admin.promocodes.edit', compact(['code', 'id']));
     }
 
     /**
