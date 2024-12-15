@@ -21,19 +21,55 @@
 
 
 
-<section class="features-section" style="background-color: #fff; padding: 8rem">
+<section class="py-5 features" id="fitur">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <h2 class="mb-4 text-center team-title">Fitur Aplikasi</h2>
-                <div class="card">
-                    <div class="card-body">
-                        <ul class="list-unstyled text-start" style="max-width: 600px; margin: auto;">
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Pembuatan toko online instan</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Checkout tanpa akun</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Subsidi ongkos kirim</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Manajemen produk</li>
-                        </ul>
+        <h2 class="features-title">Fitur Utama</h2>
+
+        <div class="mt-3 row">
+            <div class="mb-3 col-12 col-md-6 col-lg-3">
+                <div class="border-0 shadow-sm card card-feature">
+                    <div class="text-center card-body">
+                        <img src="{{ asset('assets/frontend/images/features/product-management.png') }}" alt="Feature 1"
+                            class="card-img-top">
+                        <h5 class="card-title">Manajemen</h5>
+                        <p class="card-text">Dodolan menyediakan fitur manajemen produk untuk memudahkan UMKM dalam
+                            mengelola produk mereka.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3 col-12 col-md-6 col-lg-3">
+                <div class="border-0 shadow-sm card card-feature">
+                    <div class="text-center card-body">
+                        <img src="{{ asset('assets/frontend/images/features/role-pengguna.png') }}" alt="Feature 1"
+                            class="card-img-top">
+                        <h5 class="card-title">User Friendly</h5>
+                        <p class="card-text">Dodolan dirancang sederhana dan intuitif, memudahkan pemilik UMKM
+                            tradisional yang kurang akrab teknologi.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3 col-12 col-md-6 col-lg-3">
+                <div class="border-0 shadow-sm card card-feature">
+                    <div class="text-center card-body">
+                        <img src="{{ asset('assets/frontend/images/features/laporan-penjualan.png') }}" alt="Feature 1"
+                            class="card-img-top">
+                        <h5 class="card-title">Laporan Penjualan</h5>
+                        <p class="card-text">Dodolan menyediakan fitur laporan penjualan yang membantu UMKM menganalisis
+                            performa penjualan mereka dengan data yang terstruktur dan mudah dipahami.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3 col-12 col-md-6 col-lg-3">
+                <div class="border-0 shadow-sm card card-feature">
+                    <div class="text-center card-body">
+                        <img src="{{ asset('assets/frontend/images/features/pembelian.png') }}" alt="Feature 1"
+                            class="card-img-top">
+                        <h5 class="card-title">Pembelian Mudah</h5>
+                        <p class="card-text">Dodolan memudahkan pelanggan bertransaksi tanpa perlu login, sehingga
+                            proses pembelian menjadi lebih cepat dan praktis</p>
                     </div>
                 </div>
             </div>
@@ -52,7 +88,7 @@
                         alt="Developer 1"
                         class="mb-3 team-photo img-fluid rounded-circle"
                         style="width: 120px; height: 120px; object-fit: cover;">
-                <h4 class="mb-1 member-name">Muhammad Faisal</h4>
+                <h4 class="mb-1 member-name">Naufal Qathafa Rasya Hidayat</h4>
                 <p class="member-role text-muted">Web Developer</p>
             </div>
 
@@ -61,7 +97,7 @@
                         alt="Developer 2"
                         class="mb-3 team-photo img-fluid rounded-circle"
                         style="width: 120px; height: 120px; object-fit: cover;">
-                <h4 class="mb-1 member-name">Ahmad Rasyid</h4>
+                <h4 class="mb-1 member-name">farrel Dwi Lasso</h4>
                 <p class="member-role text-muted">UI/UX Designer</p>
             </div>
 
@@ -70,55 +106,50 @@
                         alt="Developer 3"
                         class="mb-3 team-photo img-fluid rounded-circle"
                         style="width: 120px; height: 120px; object-fit: cover;">
-                <h4 class="mb-1 member-name">Siti Aisyah</h4>
+                <h4 class="mb-1 member-name">Fabiansky Trafada Perkasa</h4>
                 <p class="member-role text-muted">Frontend Developer</p>
             </div>
         </div>
     </div>
 </section>
 
-
-<footer class="footer-section">
+<footer class="mt-4 footer-section">
     <hr>
-    <div class="container" style="padding: 8rem">
-        <div class="row">
-            <div class="col-md-6">
-                <ul class="py-2 list-unstyled">
-                    <li><a href="/home" class="text-decoration-none text-dark" style="margin-bottom: 1rem;">Home</a></li>
-                    <li><a href="/about" class="text-decoration-none text-dark" style="margin-bottom: 1rem;">About</a></li>
-                    <li><a href="/blog" class="text-decoration-none text-dark" style="margin-bottom: 1rem;">Blog</a></li>
-                    <li><a href="/store" class="text-decoration-none text-dark" style="margin-bottom: 1rem;">Store</a></li>
-                </ul>
-                <ul class="list-inline">
-                    <li class="mx-2 list-inline-item">
-                        <a href="https://facebook.com" class="text-decoration-none text-dark">
-                            <i class="bi bi-facebook"></i>
-                        </a>
+    <div class="container" style="padding: 4rem">
+        <div class="row justify-content-center">
+            <div class="text-center col-12 col-md-6">
+                <ul class="py-2 list-unstyled d-flex flex-column flex-md-row justify-content-center align-items-center navigation-links">
+                    <li class="mb-3 mb-md-0 mx-md-3">
+                        <a href="{{ route('landing') }}" class="text-decoration-none text-dark link-item">Home</a>
                     </li>
-                    <li class="mx-2 list-inline-item">
-                        <a href="https://twitter.com" class="text-decoration-none text-dark">
-                            <i class="bi bi-twitter"></i>
-                        </a>
+                    <li class="mb-3 mb-md-0 mx-md-3">
+                        <a href="{{ route('list.toko') }}" class="text-decoration-none text-dark link-item">Store</a>
                     </li>
-                    <li class="mx-2 list-inline-item">
-                        <a href="https://instagram.com" class="text-decoration-none text-dark">
-                            <i class="bi bi-instagram"></i>
-                        </a>
+                    <li class="mb-3 mb-md-0 mx-md-3">
+                        <a href="{{ route('about') }}" class="text-decoration-none text-dark link-item">About</a>
                     </li>
                 </ul>
             </div>
-
-            <div class="col-md-6">
-                <h5 class="mb-3 email-text">Send Us an Email</h5>
-                <form action="#" method="POST">
-                    <div class="mb-3">
-                        <input type="email" name="email" class="form-control" placeholder="Your Email Address" required>
-                    </div>
-                    <div class="mb-3">
-                        <textarea name="message" class="form-control" rows="3" placeholder="Your Message" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Send</button>
-                </form>
+        </div>
+        <div class="mt-4 row justify-content-center">
+            <div class="text-center col-12 col-md-6">
+                <ul class="list-inline d-flex flex-column flex-md-row justify-content-center align-items-center social-icons">
+                    <li class="mb-3 mb-md-0 mx-md-3 list-inline-item">
+                        <a href="https://facebook.com" class="text-decoration-none text-dark icon-item" target="_blank">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                    </li>
+                    <li class="mb-3 mb-md-0 mx-md-3 list-inline-item">
+                        <a href="https://twitter.com" class="text-decoration-none text-dark icon-item" target="_blank">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </li>
+                    <li class="mb-3 mb-md-0 mx-md-3 list-inline-item">
+                        <a href="https://instagram.com" class="text-decoration-none text-dark icon-item" target="_blank">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -126,4 +157,9 @@
         <p class="mb-0 text-muted">&copy; 2024 Dodolan. All rights reserved.</p>
     </div>
 </footer>
+
+<script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js" crossorigin="anonymous"></script>
+
+
+
 @endsection

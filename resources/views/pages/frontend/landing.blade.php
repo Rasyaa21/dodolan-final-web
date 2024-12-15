@@ -185,45 +185,41 @@
     </section>
     <footer class="mt-4 footer-section">
         <hr>
-        <div class="container" style="padding: 8rem">
-            <div class="row">
-                <div class="col-md-6">
-                    <ul class="py-2 list-unstyled">
-                        <li><a href="/home" class="text-decoration-none text-dark " style="margin-bottom: 1rem;">Home</a></li>
-                        <li><a href="/about" class="text-decoration-none text-dark " style="margin-bottom: 1rem;">About</a></li>
-                        <li><a href="/blog" class="text-decoration-none text-dark " style="margin-bottom: 1rem;">Blog</a></li>
-                        <li><a href="/store" class="text-decoration-none text-dark " style="margin-bottom: 1rem;">Store</a></li>
-                    </ul>
-                    <ul class="list-inline">
-                        <li class="mx-2 list-inline-item">
-                            <a href="https://facebook.com" class="text-decoration-none text-dark">
-                                <i class="bi bi-facebook"></i>
-                            </a>
+        <div class="container" style="padding: 4rem">
+            <div class="row justify-content-center">
+                <div class="text-center col-12 col-md-6">
+                    <ul class="py-2 list-unstyled d-flex flex-column flex-md-row justify-content-center align-items-center navigation-links">
+                        <li class="mb-3 mb-md-0 mx-md-3">
+                            <a href="{{ route('landing') }}" class="text-decoration-none text-dark link-item">Home</a>
                         </li>
-                        <li class="mx-2 list-inline-item">
-                            <a href="https://twitter.com" class="text-decoration-none text-dark">
-                                <i class="bi bi-twitter"></i>
-                            </a>
+                        <li class="mb-3 mb-md-0 mx-md-3">
+                            <a href="{{ route('list.toko') }}" class="text-decoration-none text-dark link-item">Store</a>
                         </li>
-                        <li class="mx-2 list-inline-item">
-                            <a href="https://instagram.com" class="text-decoration-none text-dark">
-                                <i class="bi bi-instagram"></i>
-                            </a>
+                        <li class="mb-3 mb-md-0 mx-md-3">
+                            <a href="{{ route('about') }}" class="text-decoration-none text-dark link-item">About</a>
                         </li>
                     </ul>
                 </div>
-
-                <div class="col-md-6">
-                    <h5 class="mb-3 email-text">Send Us an Email</h5>
-                    <form action="#" method="POST">
-                        <div class="mb-3">
-                            <input type="email" name="email" class="form-control" placeholder="Your Email Address" required>
-                        </div>
-                        <div class="mb-3">
-                            <textarea name="message" class="form-control" rows="3" placeholder="Your Message" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Send</button>
-                    </form>
+            </div>
+            <div class="mt-4 row justify-content-center">
+                <div class="text-center col-12 col-md-6">
+                    <ul class="list-inline d-flex flex-column flex-md-row justify-content-center align-items-center social-icons">
+                        <li class="mb-3 mb-md-0 mx-md-3 list-inline-item">
+                            <a href="https://facebook.com" class="text-decoration-none text-dark icon-item" target="_blank">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </li>
+                        <li class="mb-3 mb-md-0 mx-md-3 list-inline-item">
+                            <a href="https://twitter.com" class="text-decoration-none text-dark icon-item" target="_blank">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li class="mb-3 mb-md-0 mx-md-3 list-inline-item">
+                            <a href="https://instagram.com" class="text-decoration-none text-dark icon-item" target="_blank">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -231,4 +227,9 @@
             <p class="mb-0 text-muted">&copy; 2024 Dodolan. All rights reserved.</p>
         </div>
     </footer>
+
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js" crossorigin="anonymous"></script>
+
+
+
 @endsection

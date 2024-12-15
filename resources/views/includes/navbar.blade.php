@@ -8,13 +8,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="mb-2 navbar-nav mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="#fitur">Fitur</a>
+                    <a class="nav-link" href="{{ route('landing') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#discover ">Discover</a>
+                    <a class="nav-link" href="{{ route('list.toko') }}">Store</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#testimonial ">Testimonial</a>
+                    <a class="nav-link" href="{{ route('about') }}">About Us</a>
                 </li>
             </ul>
 

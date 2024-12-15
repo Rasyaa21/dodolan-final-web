@@ -66,7 +66,9 @@ Route::get('/login-toko', [LoginController::class, 'index'])->name('login');
 Route::post('/login-toko', [LoginController::class, 'loginStore'])->name('login.store');
 
 Route::get('/', [LandingController::class, 'index'])->name('landing');
+Route::post('/', [LandingController::class, 'index'])->name('landing.post');
 Route::get('/list-toko', [LandingController::class, 'listToko'])->name('list.toko');
 Route::get('/about', [LandingController::class, 'about'])->name('about');
+Route::post('/about', [LandingController::class, 'about'])->name('about.post');
 Route::get('/{store:username}', [FrontendStoreController::class, 'show'])->name('store.show');
 Route::get('/{store:username}/product/{product:slug}', [FrontendStoreController::class, 'product'])->name('store.product.show.detail');

@@ -7,8 +7,14 @@
     <section class="py-5 store">
         <h1 class="text-center store-title">List Toko</h1>
         <div class="mt-4 store-search-container justify-content-center align-items-center">
-            <form action="{{ route('landing') }}" method="GET" class="d-flex justify-content-center">
-                <input type="text" name="store_name" class="custom-input-toko" placeholder="Cari toko berdasarkan nama..." value="{{ request('store_name') }}">
+            <form action="{{ route('list.toko') }}" method="GET" class="d-flex justify-content-center">
+                <input
+                    type="text"
+                    name="store_name"
+                    class="custom-input-toko"
+                    placeholder="Cari toko berdasarkan nama..."
+                    value="{{ request('store_name') }}">
+                <button type="submit" style="display: none;"></button>
             </form>
         </div>
         <section class="container">

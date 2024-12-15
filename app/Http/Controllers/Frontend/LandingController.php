@@ -14,9 +14,11 @@ class LandingController extends Controller
         return view('pages.frontend.landing', compact('stores'));
     }
 
-    public function listToko(){
-        $stores = Store::all();
-
+    public function listToko(Request $request){
+        $query = $request->input('store_name');
+        $stores = Store::when($query, function ($q) use ($query){
+            $q->where('store_name', 'like', '%' . $query . '%');
+        })->get();
         return view('pages.frontend.store', compact('stores'));
     }
 
