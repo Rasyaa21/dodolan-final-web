@@ -34,7 +34,7 @@
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                                     <h6 class="font-semibold text-muted">Total Produk</h6>
-                                    <h6 class="mb-0 font-extrabold">20</h6>
+                                    <h6 class="mb-0 font-extrabold">1</h6>
                                 </div>
                             </div>
                         </div>

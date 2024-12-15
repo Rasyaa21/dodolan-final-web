@@ -41,7 +41,7 @@
                             </div>
                             <div class="col-9">
                                 <h6 class="font-semibold text-muted">Pendapatan</h6>
-                                <h6 class="mb-0 font-extrabold">Rp 50.000</h6>
+                                <h6 class="mb-0 font-extrabold">{{$store->transactions->sum('total')}}</h6>
                             </div>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                             </div>
                             <div class="col-9">
                                 <h6 class="font-semibold text-muted">Total Transaksi</h6>
-                                <h6 class="mb-0 font-extrabold">80.000</h6>
+                                <h6 class="mb-0 font-extrabold">{{$store->transactions->count()}}</h6>
                             </div>
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                             </div>
                             <div class="col-9">
                                 <h6 class="font-semibold text-muted">Total Kunjungan</h6>
-                                <h6 class="mb-0 font-extrabold">{{ $store->products->sum('visits') }}</h6>
+                                <h6 class="mb-0 font-extrabold">{{ $store->products->sum('visitor') }}</h6>
                             </div>
                         </div>
                     </div>

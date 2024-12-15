@@ -11,7 +11,7 @@
             <a href="{{ route('store.dashboard', request()->route('store')) }}" class="btn btn-danger">Kembali</a>
         </div>
         <div class="card-body">
-            <form action="{{ route('store.promo.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('store.codes.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <input type="hidden" name="store_id" value="{{ request()->route('store') }}">

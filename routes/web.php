@@ -40,12 +40,13 @@ Route::prefix('store')->name('store.')->middleware(StoreMiddleware::class)->grou
     Route::get('/dashboard-toko', [StoreDashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('promo', PromoCodeController::class)->except(['index', 'create', 'show']);
-    Route::resource('codes', PromoCodeUserController::class)->except('create');
+    Route::resource('codes', PromoCodeUserController::class)->except(['create', 'show', 'edit']);
     Route::resource('transaction', TransactionUserController::class)->except(['create', 'update', 'edit']);
 
     Route::resource('product', ProductUserController::class)->except(['create', 'show', 'edit']);
 
     Route::get('/{store:id}/codes/create', [PromoCodeUserController::class, 'create'])->name('codes.create');
+    Route::get('/{store:id}/codes/{id}/edit', [PromoCodeUserController::class, 'edit'])->name('codes.edit');
 
     Route::put('/store/{store:id}/transaction/{transaction:id}/resi/add', [TransactionUserController::class, 'addNoResi'])->name('transaction.resi.create');
     Route::get('/{store:id}/transaction/create', [TransactionUserController::class, 'create'])->name('transaction.create');
