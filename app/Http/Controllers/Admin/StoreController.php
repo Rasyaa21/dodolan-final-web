@@ -9,6 +9,7 @@ use App\Interfaces\StoreRepositoryInterface;
 use App\Interfaces\ProductRepositoryInterface;
 use App\Interfaces\PromoCodesRepositoryInterface;
 use App\Interfaces\TransactionRepositoryInterface;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Log;
 
 use RealRashid\SweetAlert\Facades\Alert as Swal;
@@ -93,12 +94,11 @@ class StoreController extends Controller
      */
     public function update(UpdateStoreRequest $request, string $id)
     {
-        try {
+        try{
             $data = $request->validated();
             $this->storeRepository->updateStore($id, $data);
 
             Swal::toast('Data Toko Berhasil Diubah', 'success')->timerProgressBar();
-
             return redirect()->route('admin.store.index');
         } catch (\Exception $exception) {
             Swal::toast($exception->getMessage(), 'error')->timerProgressBar();

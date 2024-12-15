@@ -122,10 +122,6 @@
                     <a class="nav-link" id="transaksi-tab" data-bs-toggle="tab" href="#transaksi" role="tab"
                         aria-controls="transaksi" aria-selected="false">Transaksi</a>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="order-tab" data-bs-toggle="tab" href="#order" role="tab"
-                        aria-controls="order" aria-selected="false">Order</a>
-                </li>
             </ul>
 
             <div class="mt-3 tab-content">

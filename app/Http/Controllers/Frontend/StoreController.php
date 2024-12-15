@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateColorRequest;
 use App\Interfaces\ProductRepositoryInterface;
+use RealRashid\SweetAlert\Facades\Alert as Swal;
 use App\Interfaces\StoreRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -37,5 +39,21 @@ class StoreController extends Controller
         $product = $this->productRepository->getProductBySlugAndStoreId($slug, $store->id);
 
         return view('pages.frontend.store.product.show', compact('store', 'product'));
+    }
+
+    public function updateColor(UpdateColorRequest $request, int $id)
+    {
+        try {
+            $data = $request->validated();
+            $this->storeRepository->updateColor($id, $data);
+
+            Swal::toast('Store color updated successfully', 'success')->timerProgressBar();
+
+            return redirect()->route('store.dashboard', $id);
+        } catch (\Exception $exception) {
+            Swal::toast($exception->getMessage(), 'error')->timerProgressBar();
+
+            return redirect()->back();
+        }
     }
 }
