@@ -8,10 +8,19 @@ use Illuminate\Http\Request;
 
 class LandingController extends Controller
 {
-    public function index()
-    {
+    public function index(Request $request){
         $stores = Store::all();
 
         return view('pages.frontend.landing', compact('stores'));
+    }
+
+    public function listToko(){
+        $stores = Store::all();
+
+        return view('pages.frontend.store', compact('stores'));
+    }
+
+    public function about(){
+        return view('pages.frontend.about');
     }
 }
