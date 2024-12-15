@@ -52,6 +52,17 @@ class StoreRepository implements StoreRepositoryInterface
         return $store;
     }
 
+    public function updateColor(int $id, array $data){
+        $store = Store::find($id);
+
+        $store->update([
+            'header_color' => $data['header_color'],
+            'primary_color' => $data['primary_color'],
+        ]);
+
+        return $store;
+    }
+
     public function deleteStore(int $id)
     {
         return Store::find($id)->delete();

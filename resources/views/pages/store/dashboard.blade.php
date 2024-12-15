@@ -11,9 +11,11 @@
                     Dashboard Toko {{ $store->store_name }}
                 </h2>
                 <p class="text-muted" style="font-size: 1.5rem;">{{ $store->city }}</p>
-                <div class="mt-4 mb-4">
+                <div class="gap-3 mt-4 mb-4 mr-2">
                     <a href="{{ route('store.show', $store->username) }}" class="btn btn-primary rounded-pill btn-lg"
                         style="font-size: 1.1rem;">Lihat Halaman</a>
+                    <a href="{{ route('store.color.edit', $store->id) }}" class="btn btn-outline-primary rounded-pill btn-lg"
+                            style="font-size: 1.1rem;">Kustom Warna</a>
                 </div>
             </div>
 
@@ -24,7 +26,7 @@
 
         <div class="pt-4 row justify-content-between align-items-center pt-md-6">
             <div class="col-12 col-md-6 col-lg-8 d-flex flex-column align-items-start text-start">
-                <h3>Statistic</h3>
+                <h3>Statistik</h3>
             </div>
         </div>
 

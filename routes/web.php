@@ -43,7 +43,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 Route::prefix('store')->name('store.')->middleware(StoreMiddleware::class)->group(function () {
     Route::get('/dashboard-toko', [StoreDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/{store:id}/color', [StoreDashboardController::class, 'editColor'])->name('color.edit');
 
+    Route::resource('storeDashboard', StoreDashboardController::class)->except(['index', 'editColor']);
     Route::resource('promo', PromoCodeController::class)->except(['index', 'create', 'show']);
     Route::resource('codes', PromoCodeUserController::class)->except(['create', 'show', 'edit']);
     Route::resource('transaction', TransactionUserController::class)->except(['create', 'update', 'edit']);

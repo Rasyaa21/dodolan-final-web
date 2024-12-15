@@ -2,6 +2,8 @@
 
 namespace App\Interfaces;
 
+use Illuminate\Support\Arr;
+
 interface StoreRepositoryInterface
 {
     public function getAllStores();
@@ -15,4 +17,6 @@ interface StoreRepositoryInterface
     public function updateStore(int $id, array $data);
 
     public function deleteStore(int $id);
+
+    public function updateColor(int $id, array $data);
 }
