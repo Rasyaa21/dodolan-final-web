@@ -170,7 +170,6 @@
                         </figcaption>
                     </div>
                 </div>
-                <!-- Carousel Controls -->
                 <div class="mt-4 carousel-controls">
                     <button class="btn btn-outline-primary me-2" type="button" data-bs-target="#testimonialCarousel"
                         data-bs-slide="prev">
@@ -186,7 +185,7 @@
     </section>
     <footer class="mt-4 footer-section">
         <hr>
-        <div class="container py-4">
+        <div class="container" style="padding: 8rem">
             <div class="row">
                 <div class="col-md-6">
                     <ul class="py-2 list-unstyled">

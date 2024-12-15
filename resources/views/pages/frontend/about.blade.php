@@ -3,11 +3,11 @@
 @section('title', 'Dodolan')
 
 @section('content')
-<section class="py-5 about-app" style="background-color: #f9f9f9;">
+<section class="about-app" style="background: linear-gradient(135deg, #FFE5D9, #E5F0FF); padding: 8rem">
     <div class="container">
         <div class="row align-items-center">
             <div class="mb-4 text-center col-md-6 text-md-start mb-md-0">
-                <h2 class="mb-4 section-title">Dodolan</h2>
+                <h2 class="mb-4 team-title">Dodolan</h2>
                 <p class="section-description">
                     Dodolan adalah platform e-commerce berbasis web yang dirancang untuk memudahkan UMKM dalam menciptakan toko online secara instan tanpa memerlukan proses login atau keahlian teknis. Dengan berbagai fitur inovatif seperti pembuatan toko instan, checkout tanpa akun, dan subsidi ongkos kirim, platform ini bertujuan untuk membantu UMKM masuk ke dunia digital secara efisien.
                 </p>
@@ -21,30 +21,38 @@
 
 
 
-<!-- Section 2: Kegunaan Aplikasi -->
-<section class="py-5 about-usage" style="background-color: #fff;">
+<section class="about-usage" style="background-color: #fff; padding: 8rem">
     <div class="container">
         <div class="row justify-content-center">
             <div class="text-center col-md-8">
-                <h2 class="mb-4 section-title">Kegunaan Aplikasi</h2>
+                <h2 class="mb-4 team-title">Kegunaan Aplikasi</h2>
                 <p class="section-description">
-                    Aplikasi ini membantu pemilik UMKM dalam:
+                    Aplikasi ini dirancang untuk membantu pemilik UMKM dalam meningkatkan efisiensi dan memperluas jangkauan bisnis mereka melalui fitur-fitur berikut:
                 </p>
                 <ul class="mx-auto list-unstyled text-start" style="max-width: 600px;">
-                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Mengelola stok produk dengan mudah.</li>
-                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Mempromosikan produk secara online.</li>
-                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Menjangkau pelanggan lebih luas.</li>
-                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Meningkatkan penjualan dan pendapatan.</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Mengelola stok produk dengan mudah melalui sistem inventaris otomatis.</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Membuat laporan keuangan sederhana untuk memantau pemasukan dan pengeluaran.</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Mempromosikan produk secara online dengan fitur integrasi media sosial.</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Menjangkau pelanggan lebih luas melalui sistem pemasaran berbasis digital.</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Memberikan insight bisnis menggunakan analitik untuk memahami tren penjualan.</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Mempermudah pelanggan dalam melakukan transaksi melalui metode pembayaran yang terintegrasi.</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Membantu membangun loyalitas pelanggan dengan fitur pengingat dan promosi khusus.</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Mendukung kolaborasi tim melalui manajemen tugas dan komunikasi internal.</li>
                 </ul>
+                <p class="mt-4 section-description">
+                    Dengan aplikasi ini, UMKM dapat fokus pada pengembangan bisnis sambil mengandalkan teknologi untuk mendukung operasional sehari-hari.
+                </p>
             </div>
         </div>
     </div>
 </section>
 
-<section class="py-5 team-section" style="background-color: #f9f9f9;">
+<section class="team-section" style="background: linear-gradient(135deg, #FFE5D9, #E5F0FF); padding: 8rem">
     <div class="container">
+        <div class="mb-5 text-center">
+            <h2 class="team-title" style="margin-bottom: 2rem">Our Team</h2>
+        </div>
         <div class="row gy-5 justify-content-center align-items-start">
-            <!-- Developer 1 -->
             <div class="text-center col-md-4">
                 <img src="{{ asset('assets/frontend/images/team/profile1.jpg') }}"
                         alt="Developer 1"
@@ -54,7 +62,6 @@
                 <p class="member-role text-muted">Web Developer</p>
             </div>
 
-            <!-- Developer 2 -->
             <div class="text-center col-md-4">
                 <img src="{{ asset('assets/frontend/images/team/profile2.jpg') }}"
                         alt="Developer 2"
@@ -64,7 +71,6 @@
                 <p class="member-role text-muted">UI/UX Designer</p>
             </div>
 
-            <!-- Developer 3 -->
             <div class="text-center col-md-4">
                 <img src="{{ asset('assets/frontend/images/team/profile3.jpg') }}"
                         alt="Developer 3"
@@ -78,10 +84,9 @@
 </section>
 
 
-<!-- Section 4: Footer -->
-<footer class="mt-4 footer-section">
+<footer class="footer-section">
     <hr>
-    <div class="container py-4">
+    <div class="container" style="padding: 8rem">
         <div class="row">
             <div class="col-md-6">
                 <ul class="py-2 list-unstyled">
