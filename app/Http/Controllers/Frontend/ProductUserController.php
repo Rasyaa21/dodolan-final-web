@@ -56,20 +56,18 @@ class ProductUserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function show($id)
+    public function show(int $id)
     {
-        $product = $this->productRepository->getProductById($id);
-
+        $product = $this->productRepository->getProductById(request()->route('product'));
         return view('pages.frontend.store.product.show', compact('product'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(int $id)
     {
-        $product = $this->productRepository->getProductById($id);
-
+        $product = $this->productRepository->getProductById(request()->route('product'));
         return view('pages.frontend.store.product.edit', compact('product'));
     }
 
@@ -99,7 +97,6 @@ class ProductUserController extends Controller
     {
         try {
             $this->productRepository->deleteProduct($id);
-
             Swal::toast('Data Produk Berhasil Dihapus', 'success')->timerProgressBar();
 
             return redirect()->back();

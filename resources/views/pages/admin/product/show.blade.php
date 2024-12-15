@@ -3,105 +3,71 @@
 @section('title', 'Detail Produk')
 
 @section('content')
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="p-2 border-0 rounded card">
+                <div class="d-flex justify-content-end">
+                    <div class="p-2">
+                        <a href="{{ url()->previous() }}" class="btn btn-danger">Back</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="mb-4 col-md-6 d-flex justify-content-center">
+                            <img src="{{ asset('storage/' . $product->thumbnail) }}" alt="Thumbnail {{ $product->name }}" class="rounded img-fluid" style="max-width: 100%; height: auto; object-fit: cover;">
+                        </div>
+                        <div class="col-md-6">
+                            <h1 class="mt-4 mb-3" style="font-size: 2.5rem; font-weight: bold;">{{ $product->name }}</h1>
+                            <p class="mb-2 text-muted">Slug: {{ $product->slug }}</p>
+                            <h3 class="mb-3 text-primary">Rp. {{ number_format($product->price, 0, ',', '.') }}</h3>
+                            <div style="max-height: 200px; overflow-y: auto;">
+                                <p class="mb-4">{{ $product->description }}</p>
+                            </div>
+                            <p class="mb-1"><strong>Stock:</strong> {{ $product->stock }}</p>
+                            <p class="mb-1"><strong>Visitors:</strong> {{ $product->visitor }}</p>
+                        </div>
+                    </div>
+
+                    @if($product->images->count() > 0)
+                        <div class="mt-4">
+                            <h5 class="text-center">Other Images:</h5>
+                            <div class="flex-wrap gap-2 d-flex justify-content-center">
+                                @foreach ($product->images as $image)
+                                    <a href="#" class="d-block">
+                                        <img src="{{ asset('storage/' . $image->path) }}" alt="Image" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover; transition: transform 0.2s;">
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
-    body {
-        background-color: #d3dfe8;
+    .img-thumbnail {
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
     }
 
-    .product-detail {
-        background-color: #FFFFFF;
-        padding: 20px;
-        border-radius: 10px;
-        margin: 20px auto;
-        max-width: 600px;
-    }
-
-    .product-image {
-        width: 100%;
-        border-radius: 10px;
-    }
-
-    .thumbnail {
-        width: 50px;
-        height: 50px;
-        border-radius: 10px;
-        margin: 5px;
-    }
-
-    .btn-size,
-    .btn-color {
-        border: 1px solid #ccc;
-        border-radius: 20px;
-        padding: 5px 15px;
-        margin: 5px;
+    .img-thumbnail:hover {
+        transform: scale(1.1);
         cursor: pointer;
     }
 
-    .btn-buy {
-        background-color: #435ebe;
-        color: white;
-        border: none;
-        border-radius: 20px;
-        padding: 10px 20px;
-        width: 100%;
-        font-size: 18px;
+    .card {
+        background-color: #ffffff;
     }
 
-    .rating {
-        display: flex;
-        align-items: center;
+    .card-body {
+        padding: 2rem;
     }
 
-    .rating i {
-        color: #ffcc00;
-    }
-
-    .rating span {
-        margin-left: 5px;
+    .btn-danger {
+        z-index: 1;
     }
 </style>
-<div class="container">
-    <div class="product-detail">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <a class="text-dark" href="#">
-                <i class="fas fa-arrow-left">
-                </i>
-            </a>
-            <h5 class="m-0">
-                Detail Produk
-            </h5>
-            <div>
-            </div>
-        </div>
-        <img alt="Product Image" class="product-image mb-3" height="400" src="{{ asset('storage/' . $product->thumbnail) }}" width="300" height="300" />
-        <div class="d-flex justify-content-center mb-3">
-            @foreach ($product->images as $image)
-            <img alt="Thumbnail image of a pizza" class="thumbnail" height="50" src="{{ asset('storage/' . $image->path) }}" width="50" />
-            @endforeach
-
-        </div>
-        <h4>
-            {{ $product->name }}
-        </h4>
-        <h5>
-            Rp. {{ number_format($product->price, 0, ',', '.') }}
-        </h5>
-        <p>
-            {{ $product->description }}
-        </p>
-        <div class="mb-3">
-            <h6>
-                Stock: {{$product->stock}}
-            </h6>
-        </div>
-        <div class="mb-3">
-            <h6>
-                Visitor: {{$product->visitor}}
-            </h6>
-        </div>
-        <button class="btn-buy">
-            Beli Sekarang
-        </button>
-    </div>
-</div>
 @endsection

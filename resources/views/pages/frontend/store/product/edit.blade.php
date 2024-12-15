@@ -10,7 +10,7 @@
                 <a href="{{ route('store.dashboard', request()->route('store')) }}" class="btn btn-danger">Kembali</a>
             </div>
             <div class="card-body">
-                <form action="{{ route('store.product.update', $product->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('store.product.update', request()->route('product')) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="store_id" value="{{ request()->route('store') }}">
