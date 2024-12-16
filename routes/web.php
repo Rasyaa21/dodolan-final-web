@@ -79,4 +79,3 @@ Route::get('/about', [LandingController::class, 'about'])->name('about');
 Route::post('/about', [LandingController::class, 'about'])->name('about.post');
 Route::get('/{store:username}', [FrontendStoreController::class, 'show'])->name('store.show');
 Route::get('/{store:username}/product/{product:slug}', [FrontendStoreController::class, 'product'])->name('store.product.show.detail');
-Route::post('/{store:username}/product/{product:slug}', [FrontendStoreController::class, 'product'])->name('store.product.session.cart');
