@@ -5,17 +5,15 @@ namespace App\Http\Controllers\Frontend;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Store;
 
 class CheckoutController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $checkoutItems = [];
-        $totalPrice = collect($checkoutItems)->sum(function ($item) {
-            return $item['qty'] * $item['price'];
-        });
-
-        return view('pages.frontend.checkout.index', compact('checkoutItems', 'totalPrice'));
+        $storeId = request()->route('store');
+        $store = Store::find($storeId);
+        return view('pages.frontend.checkout.index', compact('store'));
     }
 
     public function process(Request $request)

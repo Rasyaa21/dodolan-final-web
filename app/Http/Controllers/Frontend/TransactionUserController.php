@@ -54,7 +54,7 @@ class TransactionUserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**

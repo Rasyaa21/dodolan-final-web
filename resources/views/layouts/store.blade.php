@@ -65,7 +65,7 @@
                             <span class="total-label">Total</span>
                             <span id="cart-total" class="total-amount">Rp 2.640.000</span>
                         </div>
-                        <button onclick="window.location.href='/checkout'" class="checkout-button" style="background-color: #FF9900">
+                        <button onclick="window.location.href = '{{ route('checkout.index', $store->id) }}'" class="checkout-button" style="background-color: #FF9900">
                             Lanjutkan Pembayaran
                             <i class="fas fa-arrow-right ms-2"></i>
                         </button>

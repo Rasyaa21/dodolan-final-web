@@ -95,6 +95,7 @@
             product_id: productId,
             name: name,
             qty: quantity,
+            original_price : price,
             price: totalPrice
         });
 
