@@ -40,4 +40,7 @@ class StoreController extends Controller
         return view('pages.frontend.store.detail', compact('store', 'product'));
     }
 
+    public function store(Request $request){
+
+    }
 }
