@@ -1,10 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.checkout')
 
 @section('title', 'Dodolan - Checkout')
 
 @section('content')
 <div class="container mt-5">
-    <h1 class="text-center mb-4"><strong>Checkout Page</strong></h1>
+    <h1 class="mb-4 text-center"><strong>Checkout Page</strong></h1>
     <div class="row">
         <div class="col-md-8">
             <div class="card">
@@ -17,9 +17,9 @@
                         <li class="list-group-item d-flex justify-content-between">
                             <div>
                                 <strong>{{ $product['product']['name'] }}</strong> <br>
-                                <small>Quantity: {{ $product['quantity'] }}</small>
+                                <small>Quantity: {{ $product['qty'] }}</small>
                             </div>
-                            <span>${{ $product['price'] * $product['quantity'] }}</span>
+                            <span>${{ $product['price'] * $product['qty'] }}</span>
                         </li>
                         @endforeach
                     </ul>
@@ -56,4 +56,22 @@
         </div>
     </div>
 </div>
+    <script>
+        const COOKIE_NAME = 'checkout_items';
+
+        function transferLocalStorageToCookie() {
+            const checkoutItems = localStorage.getItem('cart');
+            if (checkoutItems) {
+                console.log('Checkout Items:', JSON.parse(checkoutItems));
+                const expirationDate = new Date();
+                expirationDate.setTime(expirationDate.getTime() + (1 * 24 * 60 * 60 * 1000)); // 1 day
+                document.cookie = `${COOKIE_NAME}=${encodeURIComponent(checkoutItems)}; path=/; expires=${expirationDate.toUTCString()}; SameSite=None; Secure;`;
+                console.log('Cookie:', document.cookie);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            transferLocalStorageToCookie();
+        });
+    </script>
 @endsection

@@ -3,43 +3,29 @@
 namespace App\Http\Controllers\Frontend;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
+use App\Models\Product;
 
 class CheckoutController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Dummy data for checkout items
-        $checkoutItems = [
-            [
-                'id' => 1,
-                'product' => [
-                    'name' => 'Product A',
-                ],
-                'quantity' => 2,
-                'price' => 50000,
-            ],
-            [
-                'id' => 2,
-                'product' => [
-                    'name' => 'Product B',
-                ],
-                'quantity' => 1,
-                'price' => 75000,
-            ],
-            [
-                'id' => 3,
-                'product' => [
-                    'name' => 'Product C',
-                ],
-                'quantity' => 3,
-                'price' => 30000,
-            ],
-        ];
-
-        // Calculate total price
+        dd($request->cookies->all());
+        $cartData = json_decode($request->cookie('checkout_items'), true);
+        dd($cartData);
+        $checkoutItems = [];
+        // foreach($cartData as $item){
+        //     $product = Product::find($item['product_id']);
+        //     if($product){
+        //         $checkoutItems[] = [
+        //             'product' => $product,
+        //             'qty' => $item['qty'],
+        //             'price' => $item['price'],
+        //         ];
+        //     }
+        // }
         $totalPrice = collect($checkoutItems)->sum(function ($item) {
-            return $item['quantity'] * $item['price'];
+            return $item['qty'] * $item['price'];
         });
 
         return view('pages.frontend.checkout.index', compact('checkoutItems', 'totalPrice'));
