@@ -12,17 +12,12 @@
                     <h5>Order Summary</h5>
                 </div>
                 <div class="card-body">
-                    <ul class="list-group">
-                        @foreach ($checkoutItems as $product)
-                        <li class="list-group-item d-flex justify-content-between">
-                            <div>
-                                <strong>{{ $product['product']['name'] }}</strong> <br>
-                                <small>Quantity: {{ $product['quantity'] }}</small>
-                            </div>
-                            <span>${{ $product['price'] * $product['quantity'] }}</span>
-                        </li>
-                        @endforeach
+                    <ul id="cart-container" class="list-group">
+                        <!-- Cart items will be listed here -->
                     </ul>
+                    <div class="mt-3">
+                        <strong>Total Price: Rp <span id="total-price">0</span></strong>
+                    </div>
                 </div>
             </div>
         </div>
@@ -34,26 +29,83 @@
                 <div class="card-body">
                     <form method="POST" action="{{ route('checkout.process') }}">
                         @csrf
+                        <!-- Customer Name -->
                         <div class="mb-3">
-                            <label for="name" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
+                            <label for="customer_name" class="form-label">Full Name</label>
+                            <input type="text" name="customer_name" id="customer_name" class="form-control" required>
                         </div>
+
+                        <!-- Address -->
                         <div class="mb-3">
-                            <label for="address" class="form-label">Address</label>
-                            <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                            <label for="customer_address" class="form-label">Address</label>
+                            <textarea name="customer_address" id="customer_address" class="form-control" rows="4" required></textarea>
                         </div>
+
+                        <!-- Phone Number -->
                         <div class="mb-3">
-                            <label for="payment-method" class="form-label">Payment Method</label>
-                            <select class="form-select" id="payment-method" name="payment_method" required>
-                                <option value="credit_card">Bank</option>
-                                <option value="paypal">COD (Cash on Delivery)</option>
+                            <label for="customer_phone" class="form-label">Phone Number</label>
+                            <input type="text" name="customer_phone" id="customer_phone" class="form-control" required>
+                        </div>
+
+                        <!-- Payment Method -->
+                        <div class="mb-3">
+                            <label for="payment_method" class="form-label">Payment Method</label>
+                            <select name="payment_method" id="payment_method" class="form-select" required>
+                                <option value="Bank">Transfer</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">Confirm Checkout</button>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn text-light btn-warning w-100">Confirm Checkout</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    window.onload = function() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Memastikan ada produk di cart
+        if (cart.length === 0) {
+            document.getElementById('cart-container').innerHTML = 'Keranjang Anda kosong!';
+            return;
+        }
+
+        // Function to format number as IDR
+        function formatCurrency(amount) {
+            return 'Rp ' + amount.toLocaleString('id-ID');
+        }
+
+        let cartHtml = '';
+        let totalPrice = 0
+
+        cart.forEach(item => {
+            const itemTotalPrice = parseInt(item.price, 10);
+
+            totalPrice += itemTotalPrice
+
+            cartHtml += `
+            <li class="list-group-item d-flex justify-content-between">
+                <div>
+                    <strong>Produk ID: ${item.product_id}</strong> <br>
+                    <small>Quantity: ${item.qty}</small>
+                </div>
+                <span>${formatCurrency(itemTotalPrice)}</span> <!-- Manually formatted totalPrice -->
+            </li>
+        `;
+        });
+
+        cartHtml += `
+        <li class="list-group-item d-flex justify-content-between">
+            <strong>Total Price:</strong>
+            <span><strong>${formatCurrency(totalPrice)}</strong></span>
+        </li>
+        `;
+
+        // Menampilkan cart di halaman checkout
+        document.getElementById('cart-container').innerHTML = cartHtml;
+    }
+</script>
 @endsection

@@ -17,7 +17,6 @@
         animation: pop-up 1s ease-out;
     }
 
-    /* Centering the content vertically and horizontally */
     .centered-content {
         display: flex;
         justify-content: center;
@@ -36,7 +35,7 @@
             </svg>
         </div>
         <!-- Success Message -->
-        <h1 class="display-4 text-success mb-3">Payment Successful!</h1>
+        <h1 class="display-4 text-success mb-3"><strong>Payment Successful!</strong></h1>
         <p class="lead text-muted mb-4">Thank you for your purchase. Your order has been confirmed.</p>
         <a href="{{ route('checkout.index') }}" class="btn btn-success btn-lg">Go Back</a>
     </div>
