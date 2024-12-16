@@ -75,6 +75,7 @@
         </div>
     </div>
 
+
     <style>
     #floating-cart {
         position: fixed;

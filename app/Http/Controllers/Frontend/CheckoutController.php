@@ -3,13 +3,19 @@
 namespace App\Http\Controllers\Frontend;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
+use App\Models\Product;
 
 class CheckoutController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('pages.frontend.checkout.index');
+        $checkoutItems = [];
+        $totalPrice = collect($checkoutItems)->sum(function ($item) {
+            return $item['qty'] * $item['price'];
+        });
+
+        return view('pages.frontend.checkout.index', compact('checkoutItems', 'totalPrice'));
     }
 
     public function process(Request $request)

@@ -1,10 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.checkout')
 
 @section('title', 'Dodolan - Checkout')
 
 @section('content')
 <div class="container mt-5">
-    <h1 class="text-center mb-4"><strong>Checkout Page</strong></h1>
+    <h1 class="mb-4 text-center"><strong>Checkout Page</strong></h1>
     <div class="row">
         <div class="col-md-8">
             <div class="card">
@@ -12,11 +12,11 @@
                     <h5>Order Summary</h5>
                 </div>
                 <div class="card-body">
-                    <ul id="cart-container" class="list-group">
-                        <!-- Cart items will be listed here -->
+                    <ul id="order-summary" class="list-group">
+                        <!-- JavaScript will populate this -->
                     </ul>
-                    <div class="mt-3">
-                        <strong>Total Price: Rp <span id="total-price">0</span></strong>
+                    <div class="mt-3 text-end">
+                        <strong>Total: Rp. <span id="total-price">{{ number_format(0, 0, ',', '.') }}</span></strong>
                     </div>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                     <h5>Payment</h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('checkout.process') }}">
+                    <form id="checkout-form" method="POST" action="{{ route('checkout.process') }}">
                         @csrf
                         <!-- Customer Name -->
                         <div class="mb-3">
@@ -49,63 +49,71 @@
 
                         <!-- Payment Method -->
                         <div class="mb-3">
-                            <label for="payment_method" class="form-label">Payment Method</label>
-                            <select name="payment_method" id="payment_method" class="form-select" required>
-                                <option value="Bank">Transfer</option>
+                            <label for="payment-method" class="form-label">Payment Method</label>
+                            <select class="form-select" id="payment-method" name="payment_method" required>
                             </select>
                         </div>
-
-                        <!-- Submit Button -->
-                        <button type="submit" class="btn text-light btn-warning w-100">Confirm Checkout</button>
+                        <input type="hidden" id="cart-data" name="cart_data"> <!-- Hidden input for cart data -->
+                        <button type="submit" class="btn btn-primary w-100" style="background-color: #ff9000">Confirm Checkout</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Include JavaScript -->
 <script>
-    window.onload = function() {
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    document.addEventListener('DOMContentLoaded', function () {
+    const orderSummary = document.getElementById('order-summary');
+    const totalPriceElement = document.getElementById('total-price');
+    const cartDataInput = document.getElementById('cart-data');
+    const nameInput = document.getElementById('name'); // Reference to the name field
 
-        // Memastikan ada produk di cart
-        if (cart.length === 0) {
-            document.getElementById('cart-container').innerHTML = 'Keranjang Anda kosong!';
-            return;
-        }
+    // Fetch cart data from localStorage
+    const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+    let totalPrice = 0;
 
-        // Function to format number as IDR
-        function formatCurrency(amount) {
-            return 'Rp ' + amount.toLocaleString('id-ID');
-        }
+    // Populate name field from localStorage if available
+    const savedName = localStorage.getItem('user_name');
+    if (savedName) {
+        nameInput.value = savedName; // Set the saved name into the input field
+    }
 
-        let cartHtml = '';
-        let totalPrice = 0
+    // Clear existing content
+    orderSummary.innerHTML = '';
 
-        cart.forEach(item => {
-            const itemTotalPrice = parseInt(item.price, 10);
+    if (cartData.length > 0) {
+        cartData.forEach(item => {
+            const itemTotal = item.qty * item.price;
+            totalPrice += itemTotal;
 
-            totalPrice += itemTotalPrice
-
-            cartHtml += `
-            <li class="list-group-item d-flex justify-content-between">
+            // Add item to the order summary
+            const li = document.createElement('li');
+            li.className = 'list-group-item d-flex justify-content-between';
+            li.innerHTML = `
                 <div>
-                    <strong>Produk ID: ${item.product_id}</strong> <br>
+                    <strong>${item.name}</strong> <br>
                     <small>Quantity: ${item.qty}</small>
                 </div>
-                <span>${formatCurrency(itemTotalPrice)}</span> <!-- Manually formatted totalPrice -->
-            </li>
-        `;
+                <span>Rp. ${new Intl.NumberFormat('id-ID').format(itemTotal)}</span>
+            `;
+            orderSummary.appendChild(li);
         });
-
-        cartHtml += `
-        <li class="list-group-item d-flex justify-content-between">
-            <strong>Total Price:</strong>
-            <span><strong>${formatCurrency(totalPrice)}</strong></span>
-        </li>
-        `;
-
-        // Menampilkan cart di halaman checkout
-        document.getElementById('cart-container').innerHTML = cartHtml;
+    } else {
+        const li = document.createElement('li');
+        li.className = 'list-group-item text-center';
+        li.textContent = 'Your cart is empty!';
+        orderSummary.appendChild(li);
     }
+
+    // Update total price
+    totalPriceElement.textContent = new Intl.NumberFormat('id-ID').format(totalPrice);
+
+    cartDataInput.value = JSON.stringify(cartData);
+});
+
 </script>
 @endsection
+
+

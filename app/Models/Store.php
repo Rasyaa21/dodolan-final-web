@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Store extends Model
 {
@@ -36,5 +37,10 @@ class Store extends Model
     public function promoCodes()
     {
         return $this->hasMany(PromoCode::class);
+    }
+
+    public function withdraw(): HasOne
+    {
+        return $this->hasOne(Withdraw::class);
     }
 }
