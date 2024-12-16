@@ -44,6 +44,7 @@
                                     class="px-4 py-2 text-white btn btn-warning"
                                     style="background-color: #ff9000"
                                     id="add-to-cart"
+                                    data-name ="{{ $product->name }}"
                                     data-product_id="{{ $product->id }}"
                                     data-price="{{ $product->price }}"
                                     data-max_stock="{{ $product->stock }}">
@@ -85,12 +86,14 @@
     addToCartButton.addEventListener('click', function () {
         const productId = this.getAttribute('data-product_id');
         const price = parseInt(this.getAttribute('data-price'));
+        const name = this.getAttribute('data-name');
         const totalPrice = price * quantity;
 
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
         cart.push({
             product_id: productId,
+            name: name,
             qty: quantity,
             price: totalPrice
         });

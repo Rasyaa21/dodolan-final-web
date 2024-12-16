@@ -10,20 +10,7 @@ class CheckoutController extends Controller
 {
     public function index(Request $request)
     {
-        dd($request->cookies->all());
-        $cartData = json_decode($request->cookie('checkout_items'), true);
-        dd($cartData);
         $checkoutItems = [];
-        // foreach($cartData as $item){
-        //     $product = Product::find($item['product_id']);
-        //     if($product){
-        //         $checkoutItems[] = [
-        //             'product' => $product,
-        //             'qty' => $item['qty'],
-        //             'price' => $item['price'],
-        //         ];
-        //     }
-        // }
         $totalPrice = collect($checkoutItems)->sum(function ($item) {
             return $item['qty'] * $item['price'];
         });
