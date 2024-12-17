@@ -11,7 +11,7 @@
                     <a class="nav-link" href="{{ route('landing') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('list.toko') }}">Store</a>
+                    <a class="nav-link" href="{{ route('list.toko') }}">Product</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('about') }}">About Us</a>

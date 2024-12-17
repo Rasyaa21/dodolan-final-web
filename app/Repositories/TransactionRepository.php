@@ -72,10 +72,12 @@ class TransactionRepository implements TransactionRepositoryInterface
 
     public function addNoResi(int $id, array $data){
         $transaction = Transaction::find($id);
-        $transaction->update([
-            'payment_status' => $data['payment_status'],
-            'no_resi' => $data['no_resi']
-        ]);
+        if ($transaction) {
+            $transaction->update([
+                'payment_status' => $data['payment_status'],
+                'receipt_number' => $data['receipt_number']
+            ]);
+        }
     }
 
     public function checkTransactionCode(string $code): bool{

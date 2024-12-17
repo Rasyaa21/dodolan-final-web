@@ -21,7 +21,6 @@ class TransactionSeeder extends Seeder
                 'customer_name' => 'John Doe',
                 'customer_phone' => '123456789',
                 'customer_address' => '123 Main St, Springfield',
-                'receipt_number' => 10001,
                 'original_price' => 500000,
                 'discount' => 50000,
                 'final_price' => 450000,
