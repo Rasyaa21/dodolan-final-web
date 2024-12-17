@@ -26,6 +26,7 @@
 
     <script src="{{ asset('assets/frontend/js/script.js') }}"></script>
     <script src="{{ asset('assets/compiled/js/app.js') }}"></script>
+    $yield('scripts')
 </body>
 
 </html>

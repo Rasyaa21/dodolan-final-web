@@ -89,12 +89,41 @@ class CheckoutController extends Controller
                 }
             }
 
+            \Midtrans\Config::$serverKey = config('midtrans.serverKey');
+            \Midtrans\Config::$isProduction = false;
+            \Midtrans\Config::$isSanitized = true;
+            \Midtrans\Config::$is3ds = true;
+
+            $params = array(
+                'transaction_details' => array(
+                    'order_id' => $transaction->code,
+                    'gross_amount' => $transaction->final_price,
+                ),
+                'customer_details' => array(
+                    'first_name' => $transaction->customer_name,
+                    'phone' => $transaction->customer_phone,
+                    'address' => $transaction->customer_address,
+                ),
+                'item_details' => array_map(function ($cart) {
+                    return [
+                        'id' => $cart->product_id,
+                        'price' => $cart->price - $cart->discount,
+                        'quantity' => $cart->qty,
+                        'name' => Product::find($cart->product_id)?->name ?? 'Produk Tidak Ditemui',
+                    ];
+                }, $carts),
+            );
+
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+            $transaction->snap_token = $snapToken;
+            $transaction->save();
+
             // Kirim pesan via Fonnte
-            $this->sendResiNotification($transaction->receipt_number, $transaction->customer_phone, $transaction->customer_name);
+            //  $this->sendResiNotification($transaction->receipt_number, $transaction->customer_phone, $transaction->customer_name);
 
             DB::commit();
 
-            return redirect()->route('checkout.success');
+            return view('pages.frontend.checkout.success', compact('snapToken'));
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('Checkout Process Error: ' . $e->getMessage());
