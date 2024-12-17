@@ -1,11 +1,13 @@
+detail.blade
+
 @extends('layouts.store')
 
 @section('title', 'Detail Produk')
 
 @section('content')
     <div class="container p-4">
-        <div class="row mt-3">
-            <div class="col-12 col-md-6 col-lg-4 mb-3 mb-md-0 mb-lg-0">
+        <div class="mt-3 row">
+            <div class="mb-3 col-12 col-md-6 col-lg-4 mb-md-0 mb-lg-0">
                 <img src="{{ asset('storage/' . $product->thumbnail) }}" alt="Product Image" class="img-fluid">
             </div>
 
@@ -44,47 +46,70 @@
     </div>
 
     <script>
-        let quantity = 1;
+        document.addEventListener('DOMContentLoaded', () => {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            document.getElementById('cart-count').innerText =
+            `(${cart.reduce((prev, curr) => prev + curr.qty, 0)})`;
 
-        const qtyDisplay = document.getElementById('qty-display');
-        const addToCartButton = document.getElementById('add-to-cart');
-        const maxStock = parseInt(addToCartButton.getAttribute('data-max_stock'));
 
-        document.getElementById('increase-qty').addEventListener('click', function() {
-            if (quantity < maxStock) {
-                quantity++;
+            let quantity = 1;
+
+            const qtyDisplay = document.getElementById('qty-display');
+            const addToCartButton = document.getElementById('add-to-cart');
+            const maxStock = parseInt(addToCartButton.dataset.max_stock, 10);
+
+            const updateQtyDisplay = () => {
                 qtyDisplay.innerText = quantity;
-            } else {
-                alert('Jumlah produk melebihi stok yang tersedia!');
-            }
-        });
+            };
 
-        document.getElementById('decrease-qty').addEventListener('click', function() {
-            if (quantity > 1) {
-                quantity--;
-                qtyDisplay.innerText = quantity;
-            }
-        });
-
-        addToCartButton.addEventListener('click', function() {
-            const productId = this.getAttribute('data-product_id');
-            const price = parseInt(this.getAttribute('data-price'));
-            const name = this.getAttribute('data-name');
-            const totalPrice = price * quantity;
-
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-            cart.push({
-                product_id: productId,
-                name: name,
-                qty: quantity,
-                original_price: price,
-                price: totalPrice
+            document.getElementById('increase-qty').addEventListener('click', () => {
+                if (quantity < maxStock) {
+                    quantity++;
+                    updateQtyDisplay();
+                } else {
+                    alert('Jumlah produk melebihi stok yang tersedia!');
+                }
             });
 
-            localStorage.setItem('cart', JSON.stringify(cart));
+            document.getElementById('decrease-qty').addEventListener('click', () => {
+                if (quantity > 1) {
+                    quantity--;
+                    updateQtyDisplay();
+                }
+            });
 
-            alert('Produk berhasil ditambahkan ke keranjang!');
+            addToCartButton.addEventListener('click', () => {
+                const productId = addToCartButton.dataset.product_id;
+                const price = parseInt(addToCartButton.dataset.price, 10);
+                const name = addToCartButton.dataset.name;
+                const totalPrice = price * quantity;
+
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+                const existingProduct = cart.find(item => item.product_id === productId);
+
+                if (existingProduct) {
+                    existingProduct.qty += quantity;
+                    existingProduct.price = existingProduct.original_price * existingProduct.qty;
+                } else {
+                    cart.push({
+                        product_id: productId,
+                        name: name,
+                        qty: quantity,
+                        original_price: price,
+                        price: totalPrice
+                    });
+                }
+
+                localStorage.setItem('cart', JSON.stringify(cart));
+
+                const cartCount = cart.reduce((prev, curr) => prev + curr.qty, 0);
+                document.getElementById('cart-count').innerText = `(${cartCount})`;
+
+                alert('Produk berhasil ditambahkan ke keranjang!');
+            });
+
+            updateQtyDisplay();
         });
     </script>
 @endsection
