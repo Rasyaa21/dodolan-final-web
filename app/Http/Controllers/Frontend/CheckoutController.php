@@ -20,7 +20,6 @@ class CheckoutController extends Controller
 
     public function process(Request $request)
     {
-        // Dummy response for checkout success
         return redirect()->route('checkout.success')->with('success', 'Checkout successful');
     }
 
