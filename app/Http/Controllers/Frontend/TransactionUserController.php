@@ -39,6 +39,7 @@ class TransactionUserController extends Controller
     public function addNoResi(UpdateTransactionRequest $req, int $id){
         try{
             $data = $req->validated();
+            $id = request()->route('transaction');
             $this->transactionRepository->addNoResi($id, $data);
 
             Swal::toast('No Resi Berhasil Ditambahkan', 'success')->timerProgressBar();

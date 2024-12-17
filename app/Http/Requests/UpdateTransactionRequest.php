@@ -9,7 +9,7 @@ class UpdateTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'no_resi' => 'string|nullable',
+            'receipt_number' => 'string|nullable',
             'payment_status' => 'in:pending,paid,failed',
         ];
     }
