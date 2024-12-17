@@ -34,9 +34,10 @@ class CheckoutController extends Controller
         return view('pages.frontend.checkout.index', compact('store'));
     }
 
-    public function process(CheckoutRequest $request)
+    public function process(Request $request)
     {
-        $data = $request->validated();
+        $data = $request->all();
+        dd($data);
         $cartData = json_decode($request->cart_data, true);
 
         if (is_null($cartData) || !is_array($cartData) || empty($cartData)) {
@@ -93,7 +94,6 @@ class CheckoutController extends Controller
             \Midtrans\Config::$is3ds = true;
 
             DB::commit();
-
 
             return view('pages.frontend.checkout.success');
         } catch (Exception $e) {
