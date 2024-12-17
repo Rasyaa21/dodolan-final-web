@@ -17,7 +17,6 @@ use Exception;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use App\Repositories\TransactionRepository;
-use Psy\VersionUpdater\Checker;
 
 class CheckoutController extends Controller
 {
@@ -36,71 +35,67 @@ class CheckoutController extends Controller
 
     public function process(Request $request)
     {
-        $data = $request->all();
-        dd($data);
-        $cartData = json_decode($request->cart_data, true);
+        $carts = json_decode($request->cart_data);
+        $originalPrice = 0;
+        $discount = 0;
+        $finalPrice = 0;
 
-        if (is_null($cartData) || !is_array($cartData) || empty($cartData)) {
-            return back()->withErrors(['cart_data' => 'Keranjang kosong atau data tidak valid.']);
+        // Validasi jika $carts adalah array
+        if (!is_array($carts)) {
+            return redirect()->back()->withErrors(['error' => 'Invalid cart data']);
         }
 
-        $promoCode = null;
-        if ($request->promo_code) {
-            $promoCode = PromoCode::where('code', $request->promo_code)
-                ->where(function ($query) {
-                    $query->whereNull('valid_until')
-                        ->orWhere('valid_until', '>=', now());
-                })
-                ->where('amount', '>', 0)
-                ->first();
+        foreach ($carts as $cart) {
+            // Pastikan properti yang diakses ada
+            $cart->price = isset($cart->price) ? $cart->price : 0;
+            $cart->qty = isset($cart->qty) ? $cart->qty : 0;
+            $cart->discount = isset($cart->discount) ? $cart->discount : 0;
 
-            if (!$promoCode) {
-                return back()->withErrors(['promo_code' => 'Kode promo tidak valid atau sudah habis.']);
-            }
+            $originalPrice += $cart->price * $cart->qty;
+            $discount += $cart->discount * $cart->qty;
+            $finalPrice += ($cart->price - $cart->discount) * $cart->qty;
         }
-
-        DB::beginTransaction();
 
         try {
-            $transaction = $this->transactionRepository->createTransaction($data);
+            DB::beginTransaction();
 
-            if (!$transaction) {
-                throw new Exception('Gagal membuat transaksi.');
-            }
+            $transaction = Transaction::create([
+                'code' => 'TX-' . Str::upper(Str::random(8)),
+                'store_id' => $request->store_id,
+                'customer_name' => $request->customer_name,
+                'customer_phone' => $request->customer_phone,
+                'customer_address' => $request->customer_address,
+                'receipt_number' => NULL,
+                'original_price' => $originalPrice,
+                'discount' => $discount,
+                'final_price' => $finalPrice,
+            ]);
 
-            if ($promoCode) {
-                $promoCode->decrement('amount');
-            }
-
-            dd($data);
-            $transactionDetails = [];
-            foreach ($cartData as $item) {
-                $product = Product::find($item['product_id']);
-                $transactionDetails[] = [
+            foreach ($carts as $cart) {
+                TransactionDetail::create([
                     'transaction_id' => $transaction->id,
-                    'product_id' => $product->id,
-                    'qty' => $item['qty'],
-                    'price' => $product->price,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+                    'product_id' => $cart->product_id,
+                    'qty' => $cart->qty,
+                    'price' => $cart->price,
+                ]);
+
+                $product = Product::find($cart->product_id);
+                if ($product) {
+                    $product->stock = max(0, $product->stock - $cart->qty);
+                    $product->save();
+                }
             }
-
-            DB::table('transaction_details')->insert($transactionDetails);
-
-            \Midtrans\Config::$serverKey = config('midtrans.serverKey');
-            \Midtrans\Config::$isProduction = false;
-            \Midtrans\Config::$isSanitized = true;
-            \Midtrans\Config::$is3ds = true;
 
             DB::commit();
 
-            return view('pages.frontend.checkout.success');
+            return redirect()->route('checkout.success');
         } catch (Exception $e) {
             DB::rollBack();
-            dd($e);
+            Log::error('Checkout Process Error: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Failed to process the transaction.']);
         }
     }
+
 
 
     public function success()

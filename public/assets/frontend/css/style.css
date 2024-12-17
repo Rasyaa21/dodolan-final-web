@@ -634,3 +634,17 @@ blockquote p {
         margin-bottom: 1rem;
     }
 }
+
+.floating-cart {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(90%, 1200px);
+    border-radius: 12px;
+    z-index: 1050;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    padding: 1rem;
+    background-color: #fff
+}
