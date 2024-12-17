@@ -34,70 +34,71 @@ class CheckoutController extends Controller
     }
 
     public function process(CheckoutRequest $request)
-{
-    $data = $request->validated();
-    $cartData = json_decode($request->cart_data, true);
+    {
+        $data = $request->validated();
+        $cartData = json_decode($request->cart_data, true);
 
-    // Validasi keranjang
-    if (is_null($cartData) || !is_array($cartData) || empty($cartData)) {
-        return back()->withErrors(['cart_data' => 'Keranjang kosong atau data tidak valid.']);
-    }
+        if (is_null($cartData) || !is_array($cartData) || empty($cartData)) {
+            return back()->withErrors(['cart_data' => 'Keranjang kosong atau data tidak valid.']);
+        }
 
-    $promoCode = null;
-    if ($request->promo_code) {
-        $promoCode = PromoCode::where('code', $request->promo_code)
-            ->where(function ($query) {
-                $query->whereNull('valid_until')
-                    ->orWhere('valid_until', '>=', now());
-            })
-            ->where('amount', '>', 0)
-            ->first();
+        $promoCode = null;
+        if ($request->promo_code) {
+            $promoCode = PromoCode::where('code', $request->promo_code)
+                ->where(function ($query) {
+                    $query->whereNull('valid_until')
+                        ->orWhere('valid_until', '>=', now());
+                })
+                ->where('amount', '>', 0)
+                ->first();
 
-        if (!$promoCode) {
-            return back()->withErrors(['promo_code' => 'Kode promo tidak valid atau sudah habis.']);
+            if (!$promoCode) {
+                return back()->withErrors(['promo_code' => 'Kode promo tidak valid atau sudah habis.']);
+            }
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $transaction = $this->transactionRepository->createTransaction($data);
+
+            if (!$transaction) {
+                throw new Exception('Gagal membuat transaksi.');
+            }
+
+            if ($promoCode) {
+                $promoCode->decrement('amount');
+            }
+
+            $transactionDetails = [];
+            foreach ($cartData as $item) {
+                $transactionDetails[] = [
+                    'transaction_id' => $transaction->id,
+                    'product_id' => $item['product_id'],
+                    'qty' => $item['qty'],
+                    'price' => $item['price'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+
+            DB::table('transaction_details')->insert($transactionDetails);
+
+            \Midtrans\Config::$serverKey = config('midtrans.serverKey');
+            \Midtrans\Config::$isProduction = false;
+            \Midtrans\Config::$isSanitized = true;
+            \Midtrans\Config::$is3ds = true;
+
+            DB::commit();
+
+            return view('pages.frontend.checkout.success');
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return back()->withErrors(['error' => 'Terjadi kesalahan dalam memproses transaksi: ' . $e->getMessage()]);
         }
     }
 
-    DB::beginTransaction();
-
-    try {
-        $transaction = $this->transactionRepository->createTransaction($data);
-
-        if (!$transaction) {
-            throw new Exception('Gagal membuat transaksi.');
-        }
-
-        if ($promoCode) {
-            $promoCode->decrement('amount');
-        }
-
-        $transactionDetails = [];
-        foreach ($cartData as $item) {
-            $transactionDetails[] = [
-                'transaction_id' => $transaction->id,
-                'product_id' => $item['product_id'],
-                'qty' => $item['qty'],
-                'price' => $item['price'],
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
-        }
-        TransactionDetail::insert($transactionDetails);
-
-        DB::commit();
-
-        \Midtrans\Config::$serverKey = config('midtrans.serverKey');
-        \Midtrans\Config::$isProduction = false;
-        \Midtrans\Config::$isSanitized = true;
-        \Midtrans\Config::$is3ds = true;
-
-        return view('pages.frontend.checkout.success');
-    } catch (Exception $e) {
-        DB::rollBack();
-
-        return back()->withErrors(['error' => 'Terjadi kesalahan dalam memproses transaksi: ' . $e->getMessage()]);
-    }
-}
 
     public function success()
     {
