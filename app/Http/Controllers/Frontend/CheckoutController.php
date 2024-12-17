@@ -17,6 +17,7 @@ use Exception;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use App\Repositories\TransactionRepository;
+use GuzzleHttp\Client;
 
 class CheckoutController extends Controller
 {
@@ -32,7 +33,6 @@ class CheckoutController extends Controller
         $store = Store::find($storeId);
         return view('pages.frontend.checkout.index', compact('store'));
     }
-
     public function process(Request $request)
     {
         $carts = json_decode($request->cart_data);
@@ -59,18 +59,20 @@ class CheckoutController extends Controller
         try {
             DB::beginTransaction();
 
+            // Buat transaksi utama
             $transaction = Transaction::create([
                 'code' => 'TX-' . Str::upper(Str::random(8)),
                 'store_id' => $request->store_id,
                 'customer_name' => $request->customer_name,
                 'customer_phone' => $request->customer_phone,
                 'customer_address' => $request->customer_address,
-                'receipt_number' => NULL,
+                'receipt_number' => 'TX-' . Str::upper(Str::random(8)), // Generate nomor resi
                 'original_price' => $originalPrice,
                 'discount' => $discount,
                 'final_price' => $finalPrice,
             ]);
 
+            // Tambahkan detail transaksi
             foreach ($carts as $cart) {
                 TransactionDetail::create([
                     'transaction_id' => $transaction->id,
@@ -79,12 +81,16 @@ class CheckoutController extends Controller
                     'price' => $cart->price,
                 ]);
 
+                // Update stok produk
                 $product = Product::find($cart->product_id);
                 if ($product) {
                     $product->stock = max(0, $product->stock - $cart->qty);
                     $product->save();
                 }
             }
+
+            // Kirim pesan via Fonnte
+            $this->sendResiNotification($transaction->receipt_number, $transaction->customer_phone);
 
             DB::commit();
 
@@ -95,6 +101,38 @@ class CheckoutController extends Controller
             return redirect()->back()->withErrors(['error' => 'Failed to process the transaction.']);
         }
     }
+
+    /**
+     * Kirim pesan via Fonnte
+     */
+    private function sendResiNotification($resi, $phoneNumber)
+    {
+        $client = new Client();
+        $url = 'https://api.fonnte.com/send';
+
+        try {
+            $response = $client->post($url, [
+                'headers' => [
+                    'Authorization' => env('FONNTE_API_KEY'),
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ],
+                'form_params' => [
+                    'target' => $phoneNumber,
+                    'message' => "Terima kasih telah berbelanja di toko kami. Berikut nomor resi Anda: $resi",
+                ],
+            ]);
+
+            $responseBody = json_decode($response->getBody(), true);
+
+            if (!isset($responseBody['status']) || $responseBody['status'] != 200) {
+                throw new Exception('Gagal mengirim pesan: ' . ($responseBody['message'] ?? 'Unknown error'));
+            }
+        } catch (Exception $e) {
+            Log::error('Gagal mengirim pesan via Fonnte: ' . $e->getMessage());
+            throw new Exception('Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.');
+        }
+    }
+
 
 
 
