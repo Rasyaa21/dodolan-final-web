@@ -1,4 +1,4 @@
-detail.blade
+
 
 @extends('layouts.store')
 
