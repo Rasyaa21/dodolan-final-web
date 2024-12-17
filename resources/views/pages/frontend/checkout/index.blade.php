@@ -60,24 +60,6 @@
                                 <label for="customer_address" class="form-label">Alamat</label>
                                 <textarea class="form-control" id="customer_address" name="customer_address" rows="3" required></textarea>
                             </div>
-                            <div class="mb-3">
-                                <label for="promo_code" class="form-label">Kode Promo</label>
-                                <select class="form-control" id="promo_code" name="promo_code">
-                                    <option value="">Pilih Kode Promo</option>
-                                    @foreach ($store->promocodes as $promocode)
-                                        @if ($promocode->amount > 0 && (!$promocode->valid_until || \Carbon\Carbon::parse($promocode->valid_until)->isFuture()))
-                                            <option value="{{ $promocode->code }}"
-                                                data-discount="{{ $promocode->discount_amount }}"
-                                                data-discount-type="{{ $promocode->discount_type }}">
-                                                {{ $promocode->code }} - {{ $promocode->description }}
-                                                ({{ $promocode->discount_type === 'percentage' ? $promocode->discount_amount . '%' : 'Rp. ' . number_format($promocode->discount_amount, 0, ',', '.') }})
-                                            </option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <!-- Hidden Inputs for Cart Data -->
                             <input type="hidden" id="store-id" name="store_id" value="{{ $store->id }}">
                             <input type="hidden" id="original-price-input" name="original_price">
                             <input type="hidden" id="discount-input" name="discount">
@@ -94,7 +76,6 @@
         </div>
     </div>
 
-    <!-- JavaScript Section -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const orderSummary = document.getElementById('order-summary');

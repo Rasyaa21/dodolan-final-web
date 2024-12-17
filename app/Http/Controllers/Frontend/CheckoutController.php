@@ -139,7 +139,7 @@ class CheckoutController extends Controller
         $client = new Client();
         $url = 'https://api.fonnte.com/send';
 
-        $message = "Halo $customerName, 
+        $message = "Halo $customerName,
 Terima kasih telah berbelanja di toko kami! 😊
 Berikut adalah detail pembelian Anda:
 - Nomor Resi: $resi
