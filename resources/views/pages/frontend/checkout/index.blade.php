@@ -44,7 +44,6 @@
                         </div>
                     </div>
 
-                    <!-- Checkout Form -->
                     <form id="checkout-form" method="POST" action="{{ route('checkout.process', ['store' => $store->id]) }}">
                         @csrf
                         <div class="mb-3">
@@ -80,6 +79,7 @@
                         <input type="hidden" id="original-price-input" name="original_price">
                         <input type="hidden" id="discount-input" name="discount">
                         <input type="hidden" id="final-price-input" name="final_price">
+                        <input type="hidden" id="receipt_number" name="receipt_number">
                         <input type="hidden" id="cart-data" name="cart_data">
 
                         <button type="submit" class="mb-3 btn btn-primary w-100" style="background-color: #ff9000">Konfirmasi Bayar</button>

@@ -21,13 +21,6 @@ class StoreController extends Controller
         $this->productRepository = $productRepository;
     }
 
-/*************  ✨ Codeium Command ⭐  *************/
-    /**
-     * Show the specified resource.
-     *
-     * @param  string  $username
-     * @return \Illuminate\Http\Response
-/******  b31812a8-d7e9-4523-a3ac-fe63d4948797  *******/
     public function show($username)
     {
         $store = $this->storeRepository->getStoreByUsername($username);

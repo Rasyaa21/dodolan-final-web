@@ -27,12 +27,15 @@ class TransactionRepository implements TransactionRepositoryInterface
     {
         $transactionCode = "TX-" . Str::upper(Str::random(8));
 
+        $data['receipt_number'] = $data['receipt_number'] ?? 'Belum Tersedia';
+
         $transaction = Transaction::create([
             'code' => $transactionCode,
             'store_id' => request()->route('store'),
             'customer_name' => $data['customer_name'],
             'customer_phone' => $data['customer_phone'],
             'customer_address' => $data['customer_address'],
+            'receipt_number' => $data['receipt_number'],
             'original_price' => floatval($data['original_price']),
             'discount' => floatval($data['discount']),
             'final_price' => floatval($data['final_price']),
@@ -57,6 +60,7 @@ class TransactionRepository implements TransactionRepositoryInterface
                 'promo_code_id' => $data['promo_code_id'],
                 'store_id' => $data['store_id'],
                 'final_price' => $data['final_price'],
+                'receipt_number' => $data['receipt_number'],
                 'customer_name' => $data['customer_name'],
                 'customer_phone' => $data['customer_phone'],
                 'customer_address' => $data['customer_address'],

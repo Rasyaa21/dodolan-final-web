@@ -17,6 +17,7 @@ use Exception;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use App\Repositories\TransactionRepository;
+use Psy\VersionUpdater\Checker;
 
 class CheckoutController extends Controller
 {
@@ -70,13 +71,15 @@ class CheckoutController extends Controller
                 $promoCode->decrement('amount');
             }
 
+            dd($data);
             $transactionDetails = [];
             foreach ($cartData as $item) {
+                $product = Product::find($item['product_id']);
                 $transactionDetails[] = [
                     'transaction_id' => $transaction->id,
-                    'product_id' => $item['product_id'],
+                    'product_id' => $product->id,
                     'qty' => $item['qty'],
-                    'price' => $item['price'],
+                    'price' => $product->price,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
@@ -91,11 +94,11 @@ class CheckoutController extends Controller
 
             DB::commit();
 
+
             return view('pages.frontend.checkout.success');
         } catch (Exception $e) {
             DB::rollBack();
-
-            return back()->withErrors(['error' => 'Terjadi kesalahan dalam memproses transaksi: ' . $e->getMessage()]);
+            dd($e);
         }
     }
 
@@ -105,4 +108,3 @@ class CheckoutController extends Controller
         return view('pages.frontend.checkout.success');
     }
 }
-
