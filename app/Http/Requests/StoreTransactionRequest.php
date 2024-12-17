@@ -15,6 +15,7 @@ class StoreTransactionRequest extends FormRequest
             'customer_phone' => 'required|string|max:20',
             'customer_address' => 'required|string|max:500',
             'final_price' => 'required|numeric|min:0',
+            'receipt_number' => 'required|numeric|min:0',
             'input_price' => 'required|numeric|min:0',
             'shipping_fee' => 'required|numeric|min:0',
             'promo_code_id' => 'nullable|integer|exists:promo_codes,id',

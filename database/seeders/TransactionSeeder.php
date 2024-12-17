@@ -16,12 +16,13 @@ class TransactionSeeder extends Seeder
     {
         $transactions = [
             [
-                'code' => 'TRX001',
+                'code' => 'TRX043',
                 'store_id' => 1,
                 'customer_name' => 'John Doe',
                 'customer_phone' => '123456789',
                 'customer_address' => '123 Main St, Springfield',
                 'original_price' => 500000,
+                'receipt_number' => '123',
                 'discount' => 50000,
                 'final_price' => 450000,
                 'payment_status' => 'paid',
