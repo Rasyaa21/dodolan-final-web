@@ -78,4 +78,5 @@ Route::get('/list-toko', [LandingController::class, 'listToko'])->name('list.tok
 Route::get('/about', [LandingController::class, 'about'])->name('about');
 Route::post('/about', [LandingController::class, 'about'])->name('about.post');
 Route::get('/{store:username}', [FrontendStoreController::class, 'show'])->name('store.show');
+Route::get('/dashboard/{store:username}', [FrontendStoreController::class, 'showDashboard'])->name('store.dashboard.toko');
 Route::get('/{store:username}/product/{product:slug}', [FrontendStoreController::class, 'product'])->name('store.product.show.detail');

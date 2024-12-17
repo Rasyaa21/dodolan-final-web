@@ -59,23 +59,26 @@
                         </div>
                     </div>
 
-                    <div class="col text-end">
-                        <div class="gap-4 d-flex align-items-center justify-content-end">
-                            <div class="total-section">
-                                <span class="total-label">Total</span>
-                                <span id="cart-total" class="total-amount"></span>
-                            </div>
-                            <button onclick="window.location.href = `{{ route('checkout.index', $store->id) }}`"
-                                class="checkout-button"
-                                style="background-color: #FF9900;">
-                                Lanjutkan Pembayaran
-                                <i class="fas fa-arrow-right ms-2"></i>
-                            </button>
+                <div class="col text-end">
+                    <div class="gap-4 d-flex align-items-center justify-content-end">
+                        <div class="total-section">
+                            <span class="total-label">Total</span>
+                            <span id="cart-total" class="total-amount"></span>
+                            <script>
+                                const cartTotalElement = document.getElementById('cart-total');
+                                const cartTotal = parseFloat(localStorage.getItem('cartTotal')) || 0;
+                                cartTotalElement.textContent = `Rp. ${new Intl.NumberFormat('id-ID').format(cartTotal)}`;
+                            </script>
                         </div>
+                        <button onclick="window.location.href = '{{ route('checkout.index', $store->id) }}'" class="checkout-button" style="background-color: #FF9900">
+                            Lanjutkan Pembayaran
+                            <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
 
         <style>
@@ -267,3 +270,5 @@
 </body>
 
 </html>
+
+

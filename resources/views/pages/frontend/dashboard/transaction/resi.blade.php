@@ -1,4 +1,4 @@
-@extends('layouts.store')
+@extends('layouts.checkout')
 
 @section('title', 'Edit Transaksi')
 
@@ -30,10 +30,10 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="no_resi" class="form-label">No Resi</label>
-                    <input type="text" class="form-control @error('no_resi') is-invalid @enderror" id="no_resi"
-                        name="no_resi" placeholder="Masukkan No Resi" value="{{ old('no_resi', $transaction->no_resi) }}">
-                    @error('no_resi')
+                    <label for="receipt_number" class="form-label">No Resi</label>
+                    <input type="text" class="form-control @error('receipt_number') is-invalid @enderror" id="receipt_number"
+                        name="receipt_number" placeholder="Masukkan No Resi" value="{{ old('receipt_number', $transaction->receipt_number) }}">
+                    @error('receipt_number')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Store;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class LandingController extends Controller
@@ -13,13 +14,12 @@ class LandingController extends Controller
 
         return view('pages.frontend.landing', compact('stores'));
     }
-
     public function listToko(Request $request){
-        $query = $request->input('store_name');
-        $stores = Store::when($query, function ($q) use ($query){
-            $q->where('store_name', 'like', '%' . $query . '%');
+        $query = $request->input('product_name');
+        $products = Product::when($query, function ($q) use ($query){
+            $q->where('name', 'like', '%' . $query . '%');
         })->get();
-        return view('pages.frontend.store', compact('stores'));
+        return view('pages.frontend.store', compact('products'));
     }
 
     public function about(){

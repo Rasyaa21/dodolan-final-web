@@ -3,9 +3,11 @@
 @section('title', 'Dodolan - Checkout')
 
 @section('content')
+@csrf
 <div class="container mt-5">
     <h1 class="mb-4 text-center"><strong>Pembayaran</strong></h1>
     <div class="row">
+        <!-- Order Summary Section -->
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
@@ -18,10 +20,12 @@
                 </div>
             </div>
         </div>
+
+        <!-- Payment Information Section -->
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header">
-                    <h5>Infromasi Pembayaran</h5>
+                    <h5>Informasi Pembayaran</h5>
                 </div>
                 <div class="card-body">
                     <div class="p-3 mb-4 rounded price-summary bg-light">
@@ -40,6 +44,7 @@
                         </div>
                     </div>
 
+                    <!-- Checkout Form -->
                     <form id="checkout-form" method="POST" action="{{ route('checkout.process', ['store' => $store->id]) }}">
                         @csrf
                         <div class="mb-3">
@@ -70,10 +75,13 @@
                                 @endforeach
                             </select>
                         </div>
-                        <input type="hidden" id="cart-data" name="cart_data">
+
+                        <!-- Hidden Inputs for Cart Data -->
                         <input type="hidden" id="original-price-input" name="original_price">
                         <input type="hidden" id="discount-input" name="discount">
                         <input type="hidden" id="final-price-input" name="final_price">
+                        <input type="hidden" id="cart-data" name="cart_data">
+
                         <button type="submit" class="mb-3 btn btn-primary w-100" style="background-color: #ff9000">Konfirmasi Bayar</button>
                         <button type="button" id="clear-cart" class="btn btn-danger w-100">Hapus Keranjang</button>
                     </form>
@@ -83,6 +91,7 @@
     </div>
 </div>
 
+<!-- JavaScript Section -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const orderSummary = document.getElementById('order-summary');
@@ -100,14 +109,20 @@
         let cartData = JSON.parse(localStorage.getItem('cart')) || [];
         let originalPrice = 0;
 
-        function updateOrderSummary() {
-            orderSummary.innerHTML = '';
-            originalPrice = 0;
+    cartDataInput.value = JSON.stringify(cartData);
+    console.log('LocalStorage Cart:', localStorage.getItem('cart'));
+    console.log('Parsed Cart Data:', cartData);
+    console.log('Input Hidden Value:', cartDataInput.value);
 
-            cartData.forEach((item, index) => {
-                const itemTotal = item.qty * item.original_price;
 
-                originalPrice += itemTotal;
+    // Function to update the order summary
+    function updateOrderSummary() {
+        orderSummary.innerHTML = '';
+        originalPrice = 0;
+
+        cartData.forEach((item, index) => {
+            const itemTotal = item.qty * item.original_price;
+            originalPrice += itemTotal;
 
                 const li = document.createElement('li');
                 li.className = 'list-group-item';
@@ -127,35 +142,30 @@
             `;
                 orderSummary.appendChild(li);
 
-                // Add click event for delete button
-                const deleteButton = li.querySelector('.delete-item');
-                deleteButton.addEventListener('click', function() {
-                    const itemIndex = this.getAttribute('data-index');
-                    cartData.splice(itemIndex, 1);
-                    localStorage.setItem('cart', JSON.stringify(cartData));
-                    updateOrderSummary();
-                    updatePrices();
-                });
+            // Delete item event
+            li.querySelector('.delete-item').addEventListener('click', function() {
+                cartData.splice(index, 1);
+                localStorage.setItem('cart', JSON.stringify(cartData));
+                updateOrderSummary();
+                updatePrices();
             });
-        }
+        });
+
+        updatePrices();
+    }
 
         function updatePrices() {
             originalPriceElement.textContent = new Intl.NumberFormat('id-ID').format(originalPrice);
             originalPriceInput.value = originalPrice;
 
-            let discount = 0;
-            const selectedOption = promoCodeSelect.selectedOptions[0];
+        let discount = 0;
+        const selectedOption = promoCodeSelect.selectedOptions[0];
+        if (selectedOption && selectedOption.value) {
+            const discountAmount = parseFloat(selectedOption.dataset.discount);
+            const discountType = selectedOption.dataset.discountType;
 
-            if (selectedOption && selectedOption.value) {
-                const discountAmount = parseFloat(selectedOption.dataset.discount) || 0;
-                const discountType = selectedOption.dataset.discountType;
-
-                if (discountType === 'percentage' && !isNaN(discountAmount)) {
-                    discount = (discountAmount / 100) * originalPrice;
-                } else if (discountType === 'fixed' && !isNaN(discountAmount)) {
-                    discount = Math.min(discountAmount, originalPrice);
-                }
-            }
+            discount = discountType === 'percentage' ? (discountAmount / 100) * originalPrice : Math.min(discountAmount, originalPrice);
+        }
 
             discountAmountElement.textContent = new Intl.NumberFormat('id-ID').format(discount);
             discountInput.value = discount;
@@ -164,24 +174,20 @@
             finalPriceElement.textContent = new Intl.NumberFormat('id-ID').format(finalPrice);
             finalPriceInput.value = finalPrice;
 
-            cartDataInput.value = JSON.stringify(cartData);
+        cartDataInput.value = JSON.stringify(cartData);
+    }
+
+    clearCartButton.addEventListener('click', function() {
+        if (confirm('Apakah Kamu Serius Ingin Menghapus Keranjang?')) {
+            localStorage.removeItem('cart');
+            cartData = [];
+            updateOrderSummary();
         }
-
-
-        clearCartButton.addEventListener('click', function() {
-            if (confirm('Apakah Kamu Serius Ingin Mengahapus Keranjang?')) {
-                localStorage.removeItem('cart');
-                cartData = [];
-                updateOrderSummary();
-                updatePrices();
-            }
-        });
-
-        updateOrderSummary();
-        updatePrices();
-
-        promoCodeSelect.addEventListener('change', updatePrices);
     });
-</script>
 
+    promoCodeSelect.addEventListener('change', updatePrices);
+
+    updateOrderSummary();
+});
+</script>
 @endsection
