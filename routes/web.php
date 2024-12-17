@@ -19,8 +19,8 @@ use App\Http\Controllers\Store\DashboardController as StoreDashboardController;
 use App\Http\Middleware\StoreMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+Route::get('/{store:id}/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/{store:id}/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
 Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
 
 Route::prefix('admin')->name('admin.')->group(function () {

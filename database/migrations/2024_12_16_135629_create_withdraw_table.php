@@ -21,7 +21,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->timestamps();
 
-            
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
         });
     }

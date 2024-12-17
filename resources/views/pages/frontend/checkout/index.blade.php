@@ -4,57 +4,78 @@
 
 @section('content')
 <div class="container mt-5">
-    <h1 class="mb-4 text-center"><strong>Checkout Page</strong></h1>
+    <h1 class="mb-4 text-center"><strong>Pembayaran</strong></h1>
     <div class="row">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h5>Order Summary</h5>
+                    <h5>Pesanan</h5>
                 </div>
                 <div class="card-body">
                     <ul id="order-summary" class="list-group">
                         <!-- JavaScript will populate this -->
                     </ul>
-                    <div class="mt-3 text-end">
-                        <strong>Total: Rp. <span id="total-price">{{ number_format(0, 0, ',', '.') }}</span></strong>
-                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header">
-                    <h5>Payment</h5>
+                    <h5>Infromasi Pembayaran</h5>
                 </div>
                 <div class="card-body">
-                    <form id="checkout-form" method="POST" action="{{ route('checkout.process') }}">
+                    <div class="p-3 mb-4 rounded price-summary bg-light">
+                        <div class="row">
+                            <div class="col-7"><strong>Harga Asli :</strong></div>
+                            <div class="col-5 text-end">Rp. <span id="original-price">0</span></div>
+                        </div>
+                        <div class="mt-2 row">
+                            <div class="col-7"><strong>Diskon :</strong></div>
+                            <div class="col-5 text-end">Rp. <span id="discount-amount">0</span></div>
+                        </div>
+                        <hr class="my-2">
+                        <div class="row">
+                            <div class="col-7"><strong>Total :</strong></div>
+                            <div class="col-5 text-end"><strong>Rp. <span id="final-price">0</span></strong></div>
+                        </div>
+                    </div>
+
+                    <form id="checkout-form" method="POST" action="{{ route('checkout.process', ['store' => $store->id]) }}">
                         @csrf
-                        <!-- Customer Name -->
                         <div class="mb-3">
-                            <label for="customer_name" class="form-label">Full Name</label>
-                            <input type="text" name="customer_name" id="customer_name" class="form-control" required>
+                            <label for="customer_name" class="form-label">Nama Lengkap</label>
+                            <input type="text" class="form-control" id="customer_name" name="customer_name" required>
                         </div>
-
-                        <!-- Address -->
                         <div class="mb-3">
-                            <label for="customer_address" class="form-label">Address</label>
-                            <textarea name="customer_address" id="customer_address" class="form-control" rows="4" required></textarea>
+                            <label for="customer_phone" class="form-label">No Telp</label>
+                            <input type="tel" class="form-control" id="customer_phone" name="customer_phone" required>
                         </div>
-
-                        <!-- Phone Number -->
                         <div class="mb-3">
-                            <label for="customer_phone" class="form-label">Phone Number</label>
-                            <input type="text" name="customer_phone" id="customer_phone" class="form-control" required>
+                            <label for="customer_address" class="form-label">Alamat</label>
+                            <textarea class="form-control" id="customer_address" name="customer_address" rows="3" required></textarea>
                         </div>
-
-                        <!-- Payment Method -->
                         <div class="mb-3">
-                            <label for="payment-method" class="form-label">Payment Method</label>
-                            <select class="form-select" id="payment-method" name="payment_method" required>
+                            <label for="promo_code" class="form-label">Kode Promo</label>
+                            <select class="form-control" id="promo_code" name="promo_code">
+                                <option value="">Pilih Kode Promo</option>
+                                @foreach($store->promocodes as $promocode)
+                                    @if($promocode->amount > 0 && (!$promocode->valid_until || \Carbon\Carbon::parse($promocode->valid_until)->isFuture()))
+                                        <option value="{{ $promocode->code }}"
+                                                data-discount="{{ $promocode->discount_amount }}"
+                                                data-discount-type="{{ $promocode->discount_type }}">
+                                            {{ $promocode->code }} - {{ $promocode->description }}
+                                            ({{ $promocode->discount_type === 'percentage' ? $promocode->discount_amount . '%' : 'Rp. ' . number_format($promocode->discount_amount, 0, ',', '.') }})
+                                        </option>
+                                    @endif
+                                @endforeach
                             </select>
                         </div>
-                        <input type="hidden" id="cart-data" name="cart_data"> <!-- Hidden input for cart data -->
-                        <button type="submit" class="btn btn-primary w-100" style="background-color: #ff9000">Confirm Checkout</button>
+                        <input type="hidden" id="cart-data" name="cart_data">
+                        <input type="hidden" id="original-price-input" name="original_price">
+                        <input type="hidden" id="discount-input" name="discount">
+                        <input type="hidden" id="final-price-input" name="final_price">
+                        <button type="submit" class="mb-3 btn btn-primary w-100" style="background-color: #ff9000">Konfirmasi Bayar</button>
+                        <button type="button" id="clear-cart" class="btn btn-danger w-100">Hapus Keranjang</button>
                     </form>
                 </div>
             </div>
@@ -62,58 +83,104 @@
     </div>
 </div>
 
-<!-- Include JavaScript -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     const orderSummary = document.getElementById('order-summary');
-    const totalPriceElement = document.getElementById('total-price');
+    const originalPriceElement = document.getElementById('original-price');
+    const discountAmountElement = document.getElementById('discount-amount');
+    const finalPriceElement = document.getElementById('final-price');
+    const promoCodeSelect = document.getElementById('promo_code');
+    const clearCartButton = document.getElementById('clear-cart');
+
     const cartDataInput = document.getElementById('cart-data');
-    const nameInput = document.getElementById('name'); // Reference to the name field
+    const originalPriceInput = document.getElementById('original-price-input');
+    const discountInput = document.getElementById('discount-input');
+    const finalPriceInput = document.getElementById('final-price-input');
 
-    // Fetch cart data from localStorage
-    const cartData = JSON.parse(localStorage.getItem('cart')) || [];
-    let totalPrice = 0;
+    let cartData = JSON.parse(localStorage.getItem('cart')) || [];
+    let originalPrice = 0;
 
-    // Populate name field from localStorage if available
-    const savedName = localStorage.getItem('user_name');
-    if (savedName) {
-        nameInput.value = savedName; // Set the saved name into the input field
-    }
+    function updateOrderSummary() {
+        orderSummary.innerHTML = '';
+        originalPrice = 0;
 
-    // Clear existing content
-    orderSummary.innerHTML = '';
+        cartData.forEach((item, index) => {
+            const itemTotal = item.qty * item.original_price;
 
-    if (cartData.length > 0) {
-        cartData.forEach(item => {
-            const itemTotal = item.qty * item.price;
-            totalPrice += itemTotal;
+            originalPrice += itemTotal;
 
-            // Add item to the order summary
             const li = document.createElement('li');
-            li.className = 'list-group-item d-flex justify-content-between';
+            li.className = 'list-group-item';
             li.innerHTML = `
-                <div>
-                    <strong>${item.name}</strong> <br>
-                    <small>Quantity: ${item.qty}</small>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>${item.name}</strong> <br>
+                        <small>Quantity: ${item.qty} x Rp. ${new Intl.NumberFormat('id-ID').format(item.original_price)}</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="me-3">Rp. ${new Intl.NumberFormat('id-ID').format(itemTotal)}</span>
+                        <button class="btn btn-sm btn-danger delete-item" data-index="${index}">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </div>
                 </div>
-                <span>Rp. ${new Intl.NumberFormat('id-ID').format(itemTotal)}</span>
             `;
             orderSummary.appendChild(li);
+
+            // Add click event for delete button
+            const deleteButton = li.querySelector('.delete-item');
+            deleteButton.addEventListener('click', function() {
+                const itemIndex = this.getAttribute('data-index');
+                cartData.splice(itemIndex, 1);
+                localStorage.setItem('cart', JSON.stringify(cartData));
+                updateOrderSummary();
+                updatePrices();
+            });
         });
-    } else {
-        const li = document.createElement('li');
-        li.className = 'list-group-item text-center';
-        li.textContent = 'Your cart is empty!';
-        orderSummary.appendChild(li);
     }
 
-    // Update total price
-    totalPriceElement.textContent = new Intl.NumberFormat('id-ID').format(totalPrice);
+    function updatePrices() {
+        originalPriceElement.textContent = new Intl.NumberFormat('id-ID').format(originalPrice);
+        originalPriceInput.value = originalPrice;
 
-    cartDataInput.value = JSON.stringify(cartData);
+        let discount = 0;
+        const selectedOption = promoCodeSelect.selectedOptions[0];
+
+        if (selectedOption && selectedOption.value) {
+            const discountAmount = parseFloat(selectedOption.dataset.discount);
+            const discountType = selectedOption.dataset.discountType;
+
+            if (discountType === 'percentage') {
+                discount = (discountAmount / 100) * originalPrice;
+            } else if (discountType === 'fixed') {
+                discount = Math.min(discountAmount, originalPrice);
+            }
+        }
+
+        discountAmountElement.textContent = new Intl.NumberFormat('id-ID').format(discount);
+        discountInput.value = discount;
+
+        const finalPrice = originalPrice - discount;
+        finalPriceElement.textContent = new Intl.NumberFormat('id-ID').format(finalPrice);
+        finalPriceInput.value = finalPrice;
+
+        cartDataInput.value = JSON.stringify(cartData);
+    }
+
+    clearCartButton.addEventListener('click', function() {
+        if (confirm('Apakah Kamu Serius Ingin Mengahapus Keranjang?')) {
+            localStorage.removeItem('cart');
+            cartData = [];
+            updateOrderSummary();
+            updatePrices();
+        }
+    });
+
+    updateOrderSummary();
+    updatePrices();
+
+    promoCodeSelect.addEventListener('change', updatePrices);
 });
-
 </script>
+
 @endsection
-
-
