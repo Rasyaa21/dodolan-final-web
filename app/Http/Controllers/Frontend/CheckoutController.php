@@ -90,7 +90,7 @@ class CheckoutController extends Controller
             }
 
             // Kirim pesan via Fonnte
-            $this->sendResiNotification($transaction->receipt_number, $transaction->customer_phone);
+            $this->sendResiNotification($transaction->receipt_number, $transaction->customer_phone, $transaction->customer_name);
 
             DB::commit();
 
@@ -105,10 +105,20 @@ class CheckoutController extends Controller
     /**
      * Kirim pesan via Fonnte
      */
-    private function sendResiNotification($resi, $phoneNumber)
+    private function sendResiNotification($resi, $phoneNumber, $customerName)
     {
         $client = new Client();
         $url = 'https://api.fonnte.com/send';
+
+        $message = "Halo $customerName, 
+Terima kasih telah berbelanja di toko kami! 😊
+Berikut adalah detail pembelian Anda:
+- Nomor Resi: $resi
+
+Pesanan Anda sedang kami proses dan akan segera dikirim. Jika ada pertanyaan, jangan ragu untuk menghubungi kami.
+
+Salam hangat,
+Tim Toko Kami";
 
         try {
             $response = $client->post($url, [
@@ -118,7 +128,7 @@ class CheckoutController extends Controller
                 ],
                 'form_params' => [
                     'target' => $phoneNumber,
-                    'message' => "Terima kasih telah berbelanja di toko kami. Berikut nomor resi Anda: $resi",
+                    'message' => $message,
                 ],
             ]);
 
