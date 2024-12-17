@@ -3,129 +3,88 @@
 @section('title', 'Detail Produk')
 
 @section('content')
-<div class="py-5 container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-12 col-lg-10">
-            <div class="row">
-                <div class="mb-4 col-md-7">
-                    <div class="p-2 border-0 rounded card">
-                        <div class="card-body">
-                            <div class="mb-4 d-flex justify-content-center">
-                                <img src="{{ asset('storage/' . $product->thumbnail) }}"
-                                    alt="Thumbnail {{ $product->name }}"
-                                    class="rounded img-fluid"
-                                    style="max-width: 100%; height: auto; object-fit: cover;">
-                            </div>
-                            <h1 class="mt-4 mb-3" style="font-size: 2.5rem; font-weight: bold;">{{ $product->name }}</h1>
-                            <h3 class="mb-3 text-primary">Rp. {{ number_format($product->price, 0, ',', '.') }}</h3>
-                            <div style="max-height: 200px; overflow-y: auto;">
-                                <p class="mb-4">{{ $product->description }}</p>
-                            </div>
-                        </div>
+    <div class="container p-4">
+        <div class="row mt-3">
+            <div class="col-12 col-md-6 col-lg-4 mb-3 mb-md-0 mb-lg-0">
+                <img src="{{ asset('storage/' . $product->thumbnail) }}" alt="Product Image" class="img-fluid">
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-8">
+                <h2>{{ $product->name }}</h2>
+                <p class="mt-2">Rp. {{ number_format($product->price, 0, ',', '.') }}</p>
+                <p>Stok: {{ $product->stock }}</p>
+
+                <p>
+                    {!! $product->description !!}
+                </p>
+
+                <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-secondary me-2" id="decrease-qty">-</button>
+                        <span id="qty-display" class="me-2">1</span>
+                        <button class="btn btn-secondary" id="increase-qty">+</button>
                     </div>
-                </div>
-                <div class="col-md-5">
-                    <div class="p-3 border-0 rounded card">
-                        <div class="card-body">
-                            <h4 class="mb-3 text-center">Tambah ke Keranjang</h4>
-                            <div class="mb-4">
-                                <label for="qty-input" class="form-label">Jumlah Produk</label>
-                                <div class="gap-3 d-flex align-items-center">
-                                    <button id="decrease-qty" class="btn btn-secondary">-</button>
-                                    <span id="qty-display" class="text-center form-control" style="width: 3rem;">1</span>
-                                    <button id="increase-qty" class="btn btn-secondary">+</button>
-                                    <span class="ms-2" style="font-size: 1.2rem; font-weight: bold; color: black;">
-                                        Stok Tersedia: <span id="available-stock">{{ $product->stock }}</span>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="gap-2 d-grid">
-                                <button
-                                    class="px-4 py-2 text-white btn btn-warning"
-                                    style="background-color: #ff9000"
-                                    id="add-to-cart"
-                                    data-name ="{{ $product->name }}"
-                                    data-product_id="{{ $product->id }}"
-                                    data-price="{{ $product->price }}"
-                                    data-max_stock="{{ $product->stock }}">
-                                    <i class="bi-cart-fill me-1"></i> Tambah ke Keranjang
-                                </button>
-                                <a href="{{ url()->previous() }}" class="btn btn-danger">Kembali</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                    class="p-3 mt-4 border-0 rounded card"
-                    style="cursor: pointer;"
-                    onclick="window.location.href='{{ route('store.show', $product->store->username) }}'">
-                    <div class="card-body d-flex align-items-center">
-                        <div class="me-3">
-                            <img
-                                src="{{ $product->store->logo ? asset('storage/' . $product->store->logo) : asset('images/default-logo.png') }}"
-                                alt="Logo {{ $product->store->store_name }}"
-                                class="border rounded-circle"
-                                style="width: 60px; height: 60px; object-fit: cover;"
-                            >
-                        </div>
-                        <div>
-                            <h4 class="mb-1" style="font-size: 1.25rem; font-weight: bold; color: #333;">
-                                {{ $product->store->store_name }}
-                            </h4>
-                            <p class="mb-0" style="font-size: 0.95rem; color: #555;">
-                                <i class="bi-geo-alt-fill text-primary me-1"></i>{{ $product->store->city }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                    <button class="btn btn-primary ms-3" id="add-to-cart" data-product_id="{{ $product->id }}"
+                        data-name="{{ $product->name }}" data-price="{{ $product->price }}"
+                        data-max_stock="{{ $product->stock }}">Tambahkan ke Keranjang</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    let quantity = 1;
+    <div class="floating-cart d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center ">
+            <i class="fas fa-shopping-cart me-2"></i>
+            <p class="mb-0">Keranjang <span id="cart-count">(0)</span></p>
+        </div>
 
-    const qtyDisplay = document.getElementById('qty-display');
-    const addToCartButton = document.getElementById('add-to-cart');
-    const maxStock = parseInt(addToCartButton.getAttribute('data-max_stock'));
+        <a href="{{ route('checkout.index', $product->store->id) }}" class="btn btn-primary">
+            Lihat Keranjang
+        </a>
+    </div>
 
-    document.getElementById('increase-qty').addEventListener('click', function () {
-        if (quantity < maxStock) {
-            quantity++;
-            qtyDisplay.innerText = quantity;
-        } else {
-            alert('Jumlah produk melebihi stok yang tersedia!');
-        }
-    });
+    <script>
+        let quantity = 1;
 
-    document.getElementById('decrease-qty').addEventListener('click', function () {
-        if (quantity > 1) {
-            quantity--;
-            qtyDisplay.innerText = quantity;
-        }
-    });
+        const qtyDisplay = document.getElementById('qty-display');
+        const addToCartButton = document.getElementById('add-to-cart');
+        const maxStock = parseInt(addToCartButton.getAttribute('data-max_stock'));
 
-    addToCartButton.addEventListener('click', function () {
-        const productId = this.getAttribute('data-product_id');
-        const price = parseInt(this.getAttribute('data-price'));
-        const name = this.getAttribute('data-name');
-        const totalPrice = price * quantity;
-
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-        cart.push({
-            product_id: productId,
-            name: name,
-            qty: quantity,
-            original_price : price,
-            price: totalPrice
+        document.getElementById('increase-qty').addEventListener('click', function() {
+            if (quantity < maxStock) {
+                quantity++;
+                qtyDisplay.innerText = quantity;
+            } else {
+                alert('Jumlah produk melebihi stok yang tersedia!');
+            }
         });
 
-        localStorage.setItem('cart', JSON.stringify(cart));
+        document.getElementById('decrease-qty').addEventListener('click', function() {
+            if (quantity > 1) {
+                quantity--;
+                qtyDisplay.innerText = quantity;
+            }
+        });
 
-        alert('Produk berhasil ditambahkan ke keranjang!');
-        location.reload();
-    });
-</script>
+        addToCartButton.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product_id');
+            const price = parseInt(this.getAttribute('data-price'));
+            const name = this.getAttribute('data-name');
+            const totalPrice = price * quantity;
+
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            cart.push({
+                product_id: productId,
+                name: name,
+                qty: quantity,
+                original_price: price,
+                price: totalPrice
+            });
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            alert('Produk berhasil ditambahkan ke keranjang!');
+        });
+    </script>
 @endsection
