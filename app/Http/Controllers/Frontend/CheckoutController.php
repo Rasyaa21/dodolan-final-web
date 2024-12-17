@@ -17,7 +17,6 @@ use Exception;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use App\Repositories\TransactionRepository;
-use Psy\VersionUpdater\Checker;
 
 class CheckoutController extends Controller
 {
@@ -34,10 +33,9 @@ class CheckoutController extends Controller
         return view('pages.frontend.checkout.index', compact('store'));
     }
 
-    public function process(Request $request)
+    public function process(CheckoutRequest $request)
     {
-        $data = $request->all();
-        dd($data);
+        $data = $request->validated();
         $cartData = json_decode($request->cart_data, true);
 
         if (is_null($cartData) || !is_array($cartData) || empty($cartData)) {
@@ -72,7 +70,6 @@ class CheckoutController extends Controller
                 $promoCode->decrement('amount');
             }
 
-            dd($data);
             $transactionDetails = [];
             foreach ($cartData as $item) {
                 $product = Product::find($item['product_id']);
@@ -98,9 +95,11 @@ class CheckoutController extends Controller
             return view('pages.frontend.checkout.success');
         } catch (Exception $e) {
             DB::rollBack();
+
             dd($e);
         }
     }
+
 
 
     public function success()
@@ -108,3 +107,4 @@ class CheckoutController extends Controller
         return view('pages.frontend.checkout.success');
     }
 }
+

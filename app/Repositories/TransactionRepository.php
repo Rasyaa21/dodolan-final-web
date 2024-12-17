@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Interfaces\TransactionRepositoryInterface;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class TransactionRepository implements TransactionRepositoryInterface
 {
@@ -25,22 +26,21 @@ class TransactionRepository implements TransactionRepositoryInterface
 
     public function createTransaction(array $data)
     {
+        $storeId = request()->route('store');
+        log::info($data);
         $transactionCode = "TX-" . Str::upper(Str::random(8));
 
-        $data['receipt_number'] = $data['receipt_number'] ?? 'Belum Tersedia';
 
         $transaction = Transaction::create([
             'code' => $transactionCode,
-            'store_id' => request()->route('store'),
+            'store_id' => $storeId,
             'customer_name' => $data['customer_name'],
             'customer_phone' => $data['customer_phone'],
             'customer_address' => $data['customer_address'],
-            'receipt_number' => $data['receipt_number'],
-            'original_price' => floatval($data['original_price']),
-            'discount' => floatval($data['discount']),
-            'final_price' => floatval($data['final_price']),
+            'original_price' => $data['original_price'],
+            'discount' => $data['discount'],
+            'final_price' => $data['final_price'],
             'payment_status' => $data['payment_status'] ?? 'pending',
-            'promo_code_id' => $data['promo_code_id'] ?? null,
         ]);
 
         return $transaction;

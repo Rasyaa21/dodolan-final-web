@@ -13,11 +13,9 @@ class CheckoutRequest extends FormRequest
             'customer_phone' => 'required|string|max:20',
             'customer_address' => 'required|string|max:500',
             'cart_data' => 'required|json',
-            'receipt_number' => 'required|string|max:500|nullable',
             'original_price' => 'required|numeric|min:0',
             'discount' => 'required|numeric|min:0',
             'final_price' => 'required|numeric|min:0',
-            'promo_code' => 'nullable|string',
         ];
     }
 
