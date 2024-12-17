@@ -18,8 +18,9 @@ class CheckoutController extends Controller
 
     public function process(Request $request)
     {
-        // Dummy response for checkout success
-        return redirect()->route('pages.frontend.checkout.success')->with('success', 'Checkout successful (Dummy Data)!');
+        $storeId = request()->route('store');
+        $store = Store::find($storeId);
+        return redirect()->route('checkout.success', compact('store'))->with('success', 'Checkout successful (Dummy Data)!');
 
         // Set your Merchant Server Key
         \Midtrans\Config::$serverKey = config('midtrans.serverKey');
