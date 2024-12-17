@@ -125,6 +125,7 @@
         localStorage.setItem('cart', JSON.stringify(cart));
 
         alert('Produk berhasil ditambahkan ke keranjang!');
+        location.reload();
     });
 </script>
 @endsection
