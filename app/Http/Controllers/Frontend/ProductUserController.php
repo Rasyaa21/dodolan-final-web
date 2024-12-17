@@ -99,7 +99,7 @@ class ProductUserController extends Controller
             $this->productRepository->deleteProduct($id);
             Swal::toast('Data Produk Berhasil Dihapus', 'success')->timerProgressBar();
 
-            return redirect()->back();
+            return redirect()->route('store.dashboard', request()->route('store'));
         } catch (\Exception $e) {
             Swal::toast($e->getMessage(), 'error')->timerProgressBar();
 

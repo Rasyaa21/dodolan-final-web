@@ -1,4 +1,4 @@
-@extends('layouts.store')
+@extends('layouts.checkout')
 
 @section('title', 'Dashboard Toko')
 
@@ -8,11 +8,11 @@
             <div
                 class="text-center col-12 col-lg-6 text-lg-start d-flex justify-content-center justify-content-lg-start flex-column">
                 <h2 style="font-size: 3.5rem; line-height: 1.2; word-break: break-word;">
-                    Dashboard Toko {{ $store->store_name }}
+                    {{ $store->store_name }}
                 </h2>
                 <p class="text-muted" style="font-size: 1.5rem;">{{ $store->city }}</p>
                 <div class="gap-3 mt-4 mb-4 mr-2">
-                    <a href="{{ route('store.show', $store->username) }}" class="btn btn-primary rounded-pill btn-lg"
+                    <a href="{{ route('store.dashboard.toko', $store->username) }}" class="btn btn-primary rounded-pill btn-lg"
                         style="font-size: 1.1rem;">Lihat Halaman</a>
                     <a href="{{ route('store.color.edit', $store->id) }}" class="btn btn-outline-primary rounded-pill btn-lg"
                             style="font-size: 1.1rem;">Kustom Warna</a>

@@ -1,4 +1,4 @@
-@extends('layouts.store')
+@extends('layouts.checkout')
 
 @section('title', 'Detail Produk')
 

@@ -15,7 +15,7 @@ class StoreStoreRequest extends FormRequest
     {
         return [
             'username' => 'required|string|min:4|unique:stores',
-            'password' => 'required|string|min:8',
+            'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
             'store_name' => 'required|string',
             'city' => 'required|string',
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -32,6 +32,7 @@ class StoreStoreRequest extends FormRequest
             'password.required' => 'Password harus diisi',
             'password.string' => 'Password harus berupa string',
             'password.min' => 'Password minimal harus 8 karakter',
+            'password.regex' => 'Password harus terdiri dari setidaknya 1 huruf besar, 1 huruf kecil, dan 1 angka',
             'store_name.required' => 'Nama toko harus diisi',
             'store_name.string' => 'Nama toko harus berupa string',
             'city.required' => 'Kota harus diisi',
@@ -43,3 +44,4 @@ class StoreStoreRequest extends FormRequest
         ];
     }
 }
+

@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <div class="p-3 border-0 rounded shadow-sm card">
+                    <div class="p-3 border-0 rounded card">
                         <div class="card-body">
                             <h4 class="mb-3 text-center">Tambah ke Keranjang</h4>
                             <div class="mb-4">
@@ -54,6 +54,29 @@
                             </div>
                         </div>
                     </div>
+                    <div
+                    class="p-3 mt-4 border-0 rounded card"
+                    style="cursor: pointer;"
+                    onclick="window.location.href='{{ route('store.show', $product->store->username) }}'">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="me-3">
+                            <img
+                                src="{{ $product->store->logo ? asset('storage/' . $product->store->logo) : asset('images/default-logo.png') }}"
+                                alt="Logo {{ $product->store->store_name }}"
+                                class="border rounded-circle"
+                                style="width: 60px; height: 60px; object-fit: cover;"
+                            >
+                        </div>
+                        <div>
+                            <h4 class="mb-1" style="font-size: 1.25rem; font-weight: bold; color: #333;">
+                                {{ $product->store->store_name }}
+                            </h4>
+                            <p class="mb-0" style="font-size: 0.95rem; color: #555;">
+                                <i class="bi-geo-alt-fill text-primary me-1"></i>{{ $product->store->city }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
         </div>
