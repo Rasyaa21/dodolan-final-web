@@ -70,7 +70,7 @@
                                 cartTotalElement.textContent = `Rp. ${new Intl.NumberFormat('id-ID').format(cartTotal)}`;
                             </script>
                         </div>
-                        <button onclick="window.location.href = '{{ route('checkout.index', $store->id) }}'" class="checkout-button" style="background-color: #FF9900">
+                        <button onclick="window.location.href = `{{ route('checkout.index', $store->id) }}`" class="checkout-button" style="background-color: #FF9900">
                             Lanjutkan Pembayaran
                             <i class="fas fa-arrow-right ms-2"></i>
                         </button>
