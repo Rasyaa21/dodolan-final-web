@@ -24,7 +24,7 @@
             <!-- Payment Information Section -->
             <div class="col-md-4">
                 <div class="card">
-                <div class="card-header">
+                    <div class="card-header">
                         <h5>Informasi Pembayaran</h5>
                     </div>
                     <div class="card-body">
@@ -77,12 +77,11 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const orderSummary = document.getElementById('order-summary');
             const originalPriceElement = document.getElementById('original-price');
             const discountAmountElement = document.getElementById('discount-amount');
             const finalPriceElement = document.getElementById('final-price');
-            const promoCodeSelect = document.getElementById('promo_code');
             const clearCartButton = document.getElementById('clear-cart');
 
             const cartDataInput = document.getElementById('cart-data');
@@ -90,7 +89,7 @@
             const discountInput = document.getElementById('discount-input');
             const finalPriceInput = document.getElementById('final-price-input');
 
-            let cartData = JSON.parse(localStorage.getItem('cart')) || [];
+            let cartData = JSON.parse(localStorage.getItem('cart') || '[]');
             let originalPrice = 0;
 
             cartDataInput.value = JSON.stringify(cartData);
@@ -99,6 +98,12 @@
                 orderSummary.innerHTML = '';
                 originalPrice = 0;
 
+                if (cartData.length === 0) {
+                    orderSummary.innerHTML = '<li class="text-center list-group-item">Keranjang Kosong</li>';
+                    updatePrices();
+                    return;
+                }
+
                 cartData.forEach((item, index) => {
                     const itemTotal = item.qty * item.original_price;
                     originalPrice += itemTotal;
@@ -106,27 +111,27 @@
                     const li = document.createElement('li');
                     li.className = 'list-group-item';
                     li.innerHTML = `
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <strong>${item.name}</strong> <br>
-                        <small>Quantity: ${item.qty} x Rp. ${new Intl.NumberFormat('id-ID').format(item.original_price)}</small>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <span class="me-3">Rp. ${new Intl.NumberFormat('id-ID').format(itemTotal)}</span>
-                        <button class="btn btn-sm btn-danger delete-item" data-index="${index}">
-                            <i class="fas fa-trash"></i> Hapus
-                        </button>
-                    </div>
-                </div>
-            `;
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>${item.name}</strong><br>
+                                <small>Quantity: ${item.qty} x Rp. ${new Intl.NumberFormat('id-ID').format(item.original_price)}</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="me-3">Rp. ${new Intl.NumberFormat('id-ID').format(itemTotal)}</span>
+                                <button class="btn btn-sm btn-danger delete-item" data-index="${index}">
+                                    <i class="fas fa-trash"></i> Hapus
+                                </button>
+                            </div>
+                        </div>
+                    `;
+
                     orderSummary.appendChild(li);
 
-                    // Delete item event
-                    li.querySelector('.delete-item').addEventListener('click', function() {
+                    // Attach delete functionality
+                    li.querySelector('.delete-item').addEventListener('click', function () {
                         cartData.splice(index, 1);
                         localStorage.setItem('cart', JSON.stringify(cartData));
                         updateOrderSummary();
-                        updatePrices();
                     });
                 });
 
@@ -137,16 +142,7 @@
                 originalPriceElement.textContent = new Intl.NumberFormat('id-ID').format(originalPrice);
                 originalPriceInput.value = originalPrice;
 
-                let discount = 0;
-                const selectedOption = promoCodeSelect.selectedOptions[0];
-                if (selectedOption && selectedOption.value) {
-                    const discountAmount = parseFloat(selectedOption.dataset.discount);
-                    const discountType = selectedOption.dataset.discountType;
-
-                    discount = discountType === 'percentage' ? (discountAmount / 100) * originalPrice : Math.min(
-                        discountAmount, originalPrice);
-                }
-
+                const discount = 0; // Placeholder, add logic for discounts if needed
                 discountAmountElement.textContent = new Intl.NumberFormat('id-ID').format(discount);
                 discountInput.value = discount;
 
@@ -157,15 +153,13 @@
                 cartDataInput.value = JSON.stringify(cartData);
             }
 
-            clearCartButton.addEventListener('click', function() {
+            clearCartButton.addEventListener('click', function () {
                 if (confirm('Apakah Kamu Serius Ingin Menghapus Keranjang?')) {
                     localStorage.removeItem('cart');
                     cartData = [];
                     updateOrderSummary();
                 }
             });
-
-            promoCodeSelect.addEventListener('change', updatePrices);
 
             updateOrderSummary();
         });
