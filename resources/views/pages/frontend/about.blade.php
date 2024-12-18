@@ -13,7 +13,7 @@
                 </p>
             </div>
             <div class="text-center text-lg-end col-md-6">
-                <img src="https://via.placeholder.com/400x300" alt="Ilustrasi Dodolan" class="rounded img-fluid custom-img">
+                <img src="{{ asset('assets/frontend/images/dodolan.jpeg') }}" alt="Ilustrasi Dodolan" class="rounded img-fluid custom-img">
             </div>
         </div>
     </div>
@@ -84,7 +84,7 @@
         </div>
         <div class="row gy-5 justify-content-center align-items-start">
             <div class="text-center col-md-4">
-                <img src="{{ asset('assets/frontend/images/team/profile1.jpg') }}"
+                <img src="{{ asset('assets/frontend/images/developer/_MG_8893.jpg') }}"
                         alt="Developer 1"
                         class="mb-3 team-photo img-fluid rounded-circle"
                         style="width: 120px; height: 120px; object-fit: cover;">
@@ -93,7 +93,7 @@
             </div>
 
             <div class="text-center col-md-4">
-                <img src="{{ asset('assets/frontend/images/team/profile2.jpg') }}"
+                <img src="{{ asset('assets/frontend/images/developer/_MG_8884.jpg') }}"
                         alt="Developer 2"
                         class="mb-3 team-photo img-fluid rounded-circle"
                         style="width: 120px; height: 120px; object-fit: cover;">
@@ -102,7 +102,7 @@
             </div>
 
             <div class="text-center col-md-4">
-                <img src="{{ asset('assets/frontend/images/team/profile3.jpg') }}"
+                <img src="{{ asset('assets/frontend/images/developer/_MG_8883.jpg') }}"
                         alt="Developer 3"
                         class="mb-3 team-photo img-fluid rounded-circle"
                         style="width: 120px; height: 120px; object-fit: cover;">
@@ -159,7 +159,4 @@
 </footer>
 
 <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js" crossorigin="anonymous"></script>
-
-
-
 @endsection

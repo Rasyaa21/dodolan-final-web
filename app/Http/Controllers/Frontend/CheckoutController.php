@@ -40,13 +40,11 @@ class CheckoutController extends Controller
         $discount = 0;
         $finalPrice = 0;
 
-        // Validasi jika $carts adalah array
         if (!is_array($carts)) {
             return redirect()->back()->withErrors(['error' => 'Invalid cart data']);
         }
 
         foreach ($carts as $cart) {
-            // Pastikan properti yang diakses ada
             $cart->price = isset($cart->price) ? $cart->price : 0;
             $cart->qty = isset($cart->qty) ? $cart->qty : 0;
             $cart->discount = isset($cart->discount) ? $cart->discount : 0;
@@ -59,7 +57,6 @@ class CheckoutController extends Controller
         try {
             DB::beginTransaction();
 
-            // Buat transaksi utama
             $transaction = Transaction::create([
                 'code' => 'TX-' . Str::upper(Str::random(8)),
                 'store_id' => $request->store_id,
@@ -81,7 +78,6 @@ class CheckoutController extends Controller
                     'price' => $cart->price,
                 ]);
 
-                // Update stok produk
                 $product = Product::find($cart->product_id);
                 if ($product) {
                     $product->stock = max(0, $product->stock - $cart->qty);
@@ -118,15 +114,12 @@ class CheckoutController extends Controller
         }
     }
 
-    /**
-     * Kirim pesan via Fonnte
-     */
     private function sendResiNotification($resi, $phoneNumber, $customerName)
     {
         $client = new Client();
         $url = 'https://api.fonnte.com/send';
 
-        $message = "Halo $customerName, 
+        $message = "Halo $customerName,
 Terima kasih telah berbelanja di toko kami! 😊
 Berikut adalah detail pembelian Anda:
 - Nomor Resi: $resi
