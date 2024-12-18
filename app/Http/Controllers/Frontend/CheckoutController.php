@@ -66,7 +66,7 @@ class CheckoutController extends Controller
                 'customer_name' => $request->customer_name,
                 'customer_phone' => $request->customer_phone,
                 'customer_address' => $request->customer_address,
-                'receipt_number' => 'TX-' . Str::upper(Str::random(8)), // Generate nomor resi
+                'receipt_number' => 'TX-' . Str::upper(Str::random(8)),
                 'original_price' => $originalPrice,
                 'discount' => $discount,
                 'final_price' => $finalPrice,
@@ -95,28 +95,15 @@ class CheckoutController extends Controller
             \Midtrans\Config::$is3ds = true;
 
             $params = array(
-                'transaction_details' => array(
+                'transaction_details' => [
                     'order_id' => $transaction->code,
                     'gross_amount' => $transaction->final_price,
-                ),
-                'customer_details' => array(
-                    'first_name' => $transaction->customer_name,
-                    'phone' => $transaction->customer_phone,
-                    'address' => $transaction->customer_address,
-                ),
-                'item_details' => array_map(function ($cart) {
-                    return [
-                        'id' => $cart->product_id,
-                        'price' => $cart->price - $cart->discount,
-                        'quantity' => $cart->qty,
-                        'name' => Product::find($cart->product_id)?->name ?? 'Produk Tidak Ditemui',
-                    ];
-                }, $carts),
+                ]
             );
 
-            $snapToken = \Midtrans\Snap::getSnapToken($params);
-            $transaction->snap_token = $snapToken;
-            $transaction->save();
+            $paymentUrl = \Midtrans\Snap::createTransaction($params)->redirect_url;
+            return redirect($paymentUrl);
+
 
             // Kirim pesan via Fonnte
             //  $this->sendResiNotification($transaction->receipt_number, $transaction->customer_phone, $transaction->customer_name);
@@ -180,3 +167,4 @@ Tim Toko Kami";
         return view('pages.frontend.checkout.success');
     }
 }
+

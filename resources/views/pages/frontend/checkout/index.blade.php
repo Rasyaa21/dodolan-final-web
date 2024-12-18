@@ -84,7 +84,7 @@
                             <input type="hidden" id="final-price-input" name="final_price">
                             <input type="hidden" id="cart-data" name="cart_data">
 
-                            <button type="submit" class="mb-3 btn btn-primary w-100" id="pay-button"
+                            <button type="submit" class="mb-3 btn btn-primary w-100"
                                 style="background-color: #ff9000">Konfirmasi Bayar</button>
                             <button type="button" id="clear-cart" class="btn btn-danger w-100">Hapus Keranjang</button>
                         </form>
@@ -189,24 +189,5 @@
 
             updateOrderSummary();
         });
-    </script>
-@endsection
-
-@section('scripts')
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.clientKey') }}"></script>
-    <script type="text/javascript">
-        document.getElementById('pay-button').onclick = function () {
-            snap.pay('{{ $snapToken }}', {
-                onSuccess: function (result) {
-                    document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
-                },
-                onPending: function (result) {
-                    document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
-                },
-                onError: function (result) {
-                    document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
-                }
-            });
-        };
     </script>
 @endsection
