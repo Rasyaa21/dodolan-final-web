@@ -95,7 +95,6 @@
 
             cartDataInput.value = JSON.stringify(cartData);
 
-            // Function to update the order summary
             function updateOrderSummary() {
                 orderSummary.innerHTML = '';
                 originalPrice = 0;
