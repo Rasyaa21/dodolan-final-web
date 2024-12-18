@@ -101,7 +101,7 @@ class CheckoutController extends Controller
             DB::commit();
             return redirect($paymentUrl);
             // Kirim pesan via Fonnte
-            $this->sendResiNotification($transaction->receipt_number, $transaction->customer_phone, $transaction->customer_name);
+            $this->sendTransactionSuccessNotification($transaction);
 
         } catch (Exception $e) {
             DB::rollBack();
@@ -109,6 +109,47 @@ class CheckoutController extends Controller
             return redirect()->back()->withErrors(['error' => 'Failed to process the transaction.']);
         }
     }
+
+    private function sendTransactionSuccessNotification($transaction)
+{
+    $client = new Client();
+    $url = 'https://api.fonnte.com/send';
+
+    $message = "Halo {$transaction->customer_name},
+Terima kasih telah menyelesaikan transaksi di toko kami! 😊
+
+Detail transaksi Anda:
+- Nomor Pesanan: {$transaction->code}
+- Total Pembayaran: Rp " . number_format($transaction->final_price, 0, ',', '.') . "
+
+Pesanan Anda sedang kami proses. Jika ada pertanyaan, jangan ragu untuk menghubungi kami.
+
+Salam hangat,
+Tim Toko Kami";
+
+    try {
+        $response = $client->post($url, [
+            'headers' => [
+                'Authorization' => env('FONNTE_API_KEY'),
+                'Content-Type' => 'application/x-www-form-urlencoded',
+            ],
+            'form_params' => [
+                'target' => $transaction->customer_phone,
+                'message' => $message,
+            ],
+        ]);
+
+        $responseBody = json_decode($response->getBody(), true);
+
+        if (!isset($responseBody['status']) || $responseBody['status'] != 200) {
+            throw new Exception('Gagal mengirim pesan: ' . ($responseBody['message'] ?? 'Unknown error'));
+        }
+    } catch (Exception $e) {
+        Log::error('Gagal mengirim pesan sukses via Fonnte: ' . $e->getMessage());
+        throw new Exception('Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.');
+    }
+}
+
 
     private function sendResiNotification($resi, $phoneNumber, $customerName)
     {

@@ -78,90 +78,103 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const orderSummary = document.getElementById('order-summary');
-            const originalPriceElement = document.getElementById('original-price');
-            const discountAmountElement = document.getElementById('discount-amount');
-            const finalPriceElement = document.getElementById('final-price');
-            const clearCartButton = document.getElementById('clear-cart');
+    const orderSummary = document.getElementById('order-summary');
+    const originalPriceElement = document.getElementById('original-price');
+    const discountAmountElement = document.getElementById('discount-amount');
+    const finalPriceElement = document.getElementById('final-price');
+    const clearCartButton = document.getElementById('clear-cart');
+    const checkoutForm = document.getElementById('checkout-form');
 
-            const cartDataInput = document.getElementById('cart-data');
-            const originalPriceInput = document.getElementById('original-price-input');
-            const discountInput = document.getElementById('discount-input');
-            const finalPriceInput = document.getElementById('final-price-input');
+    const cartDataInput = document.getElementById('cart-data');
+    const originalPriceInput = document.getElementById('original-price-input');
+    const discountInput = document.getElementById('discount-input');
+    const finalPriceInput = document.getElementById('final-price-input');
 
-            let cartData = JSON.parse(localStorage.getItem('cart') || '[]');
-            let originalPrice = 0;
+    let cartData = JSON.parse(localStorage.getItem('cart') || '[]');
+    let originalPrice = 0;
 
-            cartDataInput.value = JSON.stringify(cartData);
+    cartDataInput.value = JSON.stringify(cartData);
 
-            function updateOrderSummary() {
-                orderSummary.innerHTML = '';
-                originalPrice = 0;
+    function updateOrderSummary() {
+        orderSummary.innerHTML = '';
+        originalPrice = 0;
 
-                if (cartData.length === 0) {
-                    orderSummary.innerHTML = '<li class="text-center list-group-item">Keranjang Kosong</li>';
-                    updatePrices();
-                    return;
-                }
+        if (cartData.length === 0) {
+            orderSummary.innerHTML = '<li class="text-center list-group-item">Keranjang Kosong</li>';
+            updatePrices();
+            return;
+        }
 
-                cartData.forEach((item, index) => {
-                    const itemTotal = item.qty * item.original_price;
-                    originalPrice += itemTotal;
+        cartData.forEach((item, index) => {
+            const itemTotal = item.qty * item.original_price;
+            originalPrice += itemTotal;
 
-                    const li = document.createElement('li');
-                    li.className = 'list-group-item';
-                    li.innerHTML = `
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong>${item.name}</strong><br>
-                                <small>Quantity: ${item.qty} x Rp. ${new Intl.NumberFormat('id-ID').format(item.original_price)}</small>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <span class="me-3">Rp. ${new Intl.NumberFormat('id-ID').format(itemTotal)}</span>
-                                <button class="btn btn-sm btn-danger delete-item" data-index="${index}">
-                                    <i class="fas fa-trash"></i> Hapus
-                                </button>
-                            </div>
-                        </div>
-                    `;
+            const li = document.createElement('li');
+            li.className = 'list-group-item';
+            li.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>${item.name}</strong><br>
+                        <small>Quantity: ${item.qty} x Rp. ${new Intl.NumberFormat('id-ID').format(item.original_price)}</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="me-3">Rp. ${new Intl.NumberFormat('id-ID').format(itemTotal)}</span>
+                        <button class="btn btn-sm btn-danger delete-item" data-index="${index}">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </div>
+                </div>
+            `;
 
-                    orderSummary.appendChild(li);
+            orderSummary.appendChild(li);
 
-                    // Attach delete functionality
-                    li.querySelector('.delete-item').addEventListener('click', function () {
-                        cartData.splice(index, 1);
-                        localStorage.setItem('cart', JSON.stringify(cartData));
-                        updateOrderSummary();
-                    });
-                });
-
-                updatePrices();
-            }
-
-            function updatePrices() {
-                originalPriceElement.textContent = new Intl.NumberFormat('id-ID').format(originalPrice);
-                originalPriceInput.value = originalPrice;
-
-                const discount = 0; // Placeholder, add logic for discounts if needed
-                discountAmountElement.textContent = new Intl.NumberFormat('id-ID').format(discount);
-                discountInput.value = discount;
-
-                const finalPrice = originalPrice - discount;
-                finalPriceElement.textContent = new Intl.NumberFormat('id-ID').format(finalPrice);
-                finalPriceInput.value = finalPrice;
-
-                cartDataInput.value = JSON.stringify(cartData);
-            }
-
-            clearCartButton.addEventListener('click', function () {
-                if (confirm('Apakah Kamu Serius Ingin Menghapus Keranjang?')) {
-                    localStorage.removeItem('cart');
-                    cartData = [];
-                    updateOrderSummary();
-                }
+            // Attach delete functionality
+            li.querySelector('.delete-item').addEventListener('click', function () {
+                cartData.splice(index, 1);
+                localStorage.setItem('cart', JSON.stringify(cartData));
+                updateOrderSummary();
             });
-
-            updateOrderSummary();
         });
+
+        updatePrices();
+    }
+
+    function updatePrices() {
+        originalPriceElement.textContent = new Intl.NumberFormat('id-ID').format(originalPrice);
+        originalPriceInput.value = originalPrice;
+
+        const discount = 0; // Placeholder, add logic for discounts if needed
+        discountAmountElement.textContent = new Intl.NumberFormat('id-ID').format(discount);
+        discountInput.value = discount;
+
+        const finalPrice = originalPrice - discount;
+        finalPriceElement.textContent = new Intl.NumberFormat('id-ID').format(finalPrice);
+        finalPriceInput.value = finalPrice;
+
+        cartDataInput.value = JSON.stringify(cartData);
+    }
+
+    clearCartButton.addEventListener('click', function () {
+        if (confirm('Apakah Kamu Serius Ingin Menghapus Keranjang?')) {
+            localStorage.removeItem('cart');
+            cartData = [];
+            updateOrderSummary();
+        }
+    });
+
+    // Clear localStorage on form submit
+    checkoutForm.addEventListener('submit', function (e) {
+        if (cartData.length === 0) {
+            e.preventDefault();
+            alert('Keranjang kosong, tidak dapat melanjutkan pembayaran.');
+            return;
+        }
+
+        // Clear cart from localStorage after confirmation
+        localStorage.removeItem('cart');
+    });
+
+    updateOrderSummary();
+});
     </script>
 @endsection

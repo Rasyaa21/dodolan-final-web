@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateTransactionDetailRequest;
 use App\Http\Requests\UpdateTransactionRequest;
 use App\Models\Transaction;
+use GuzzleHttp\Client;
+use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert as Swal;
 
@@ -88,15 +91,26 @@ class TransactionUserController extends Controller
     public function update(UpdateTransactionDetailRequest $request, string $id)
     {
         try {
+            // Validasi data dari request
             $data = $request->validated();
 
-            $this->transactionRepository->updateTransaction($id, $data);
+            $transaction = $this->transactionRepository->updateTransaction($id, $data);
 
-            Swal::toast('Transaction successfully updated', 'success')->timerProgressBar();
+            if (!$transaction) {
+                throw new \Exception('Transaction not found');
+            }
+
+            $this->sendResiNotification(
+                $transaction->receipt_number,
+                $transaction->customer_phone,
+                $transaction->customer_name
+            );
+
+            session()->flash('success', 'Transaction successfully updated');
 
             return redirect()->back();
         } catch (\Exception $exception) {
-            Swal::toast($exception->getMessage(), 'error')->timerProgressBar();
+            session()->flash('error', $exception->getMessage());
 
             return redirect()->back();
         }
@@ -108,6 +122,44 @@ class TransactionUserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    private function sendResiNotification($resi, $phoneNumber, $customerName)
+    {
+        $client = new Client();
+        $url = 'https://api.fonnte.com/send';
+
+        $message = "Halo $customerName,
+    Terima kasih telah berbelanja di toko kami! 😊
+    Berikut adalah detail pembelian Anda:
+    - Nomor Resi: $resi
+
+    Pesanan Anda sedang kami proses dan akan segera dikirim. Jika ada pertanyaan, jangan ragu untuk menghubungi kami.
+
+    Salam hangat,
+    Tim Toko Kami";
+
+        try {
+            $response = $client->post($url, [
+                'headers' => [
+                    'Authorization' => env('FONNTE_API_KEY'),
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ],
+                'form_params' => [
+                    'target' => $phoneNumber,
+                    'message' => $message,
+                ],
+            ]);
+
+            $responseBody = json_decode($response->getBody(), true);
+
+            if (!isset($responseBody['status']) || $responseBody['status'] != 200) {
+                throw new \Exception('Failed to send message: ' . ($responseBody['message'] ?? 'Unknown error'));
+            }
+        } catch (\Exception $e) {
+            Log::error('Failed to send notification via Fonnte: ' . $e->getMessage());
+            throw new \Exception('An error occurred while sending the message. Please try again.');
+        }
     }
 }
 
