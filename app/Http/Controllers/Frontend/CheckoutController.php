@@ -85,7 +85,7 @@ class CheckoutController extends Controller
                 }
             }
 
-            \Midtrans\Config::$serverKey = config('midtrans.serverKey');
+            \Midtrans\Config::$serverKey = config('midtrans.server_key');
             \Midtrans\Config::$isProduction = false;
             \Midtrans\Config::$isSanitized = true;
             \Midtrans\Config::$is3ds = true;
@@ -98,18 +98,14 @@ class CheckoutController extends Controller
             );
 
             $paymentUrl = \Midtrans\Snap::createTransaction($params)->redirect_url;
-            return redirect($paymentUrl);
-
-
-            // Kirim pesan via Fonnte
-            //  $this->sendResiNotification($transaction->receipt_number, $transaction->customer_phone, $transaction->customer_name);
-
             DB::commit();
+            return redirect($paymentUrl);
+            // Kirim pesan via Fonnte
+            $this->sendResiNotification($transaction->receipt_number, $transaction->customer_phone, $transaction->customer_name);
 
-            return view('pages.frontend.checkout.success', compact('snapToken'));
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error('Checkout Process Error: ' . $e->getMessage());
+            dd($e);
             return redirect()->back()->withErrors(['error' => 'Failed to process the transaction.']);
         }
     }
