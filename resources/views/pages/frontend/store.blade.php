@@ -24,7 +24,7 @@
                         <div class="mb-3 col-6 col-lg-3 col-md-6">
                             <div class="card card-product">
                                 <a href="{{ route('store.show', $product->store->username) }}" class="text-decoration-none">
-                                    <img src="{{ asset('storage/' . $product->store->logo) }}" alt="image" class="card-img-top">
+                                    <img src="{{ asset('storage/' . $product->thumbnail) }}" alt="image" class="card-img-top">
                                     <h5 class="mt-3 card-text" style="font-size: 1.4rem; font-weight: bold;">{{ $product->name }}</h5>
                                     <p class="mt-2 card-text">{{ Str::limit($product->description, 50) }}</p>
                                     <p class="mt-2 card-text" style="font-size: 1.2rem; font-weight: bold;">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
